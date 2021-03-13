@@ -60,26 +60,6 @@
 
 <script>
 /* eslint-disable vue/no-unused-components, no-unused-vars */
-function DefaultNewLesson() {
-  return {
-    page: 1,
-    juz: 1,
-    mistakes: 0,
-    assigned: false,
-    completed: false,
-  };
-}
-
-function DefaultCurrentLesson() {
-  return { portion: "current", assigned: false, recited: false };
-}
-
-function DefaultGeneralRevision() {
-  return {
-    juz: 4,
-    mistakes: 0,
-  };
-}
 
 
 import HelloWorld from "./components/HelloWorld.vue";
@@ -135,18 +115,6 @@ td {
   text-align: center;
 }
 
-h1 {
-  font-family: Cambria;
-  color: #000;
-  font-size: 40px;
-  font-size-adjust: none;
-  font-stretch: normal;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: normal;
-  line-height: 19px;
-  margin-bottom: 7px;
-}
 
 /* Cells in even rows (2,4,6...) are one color */
 tr:nth-child(even) td {

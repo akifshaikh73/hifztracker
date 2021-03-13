@@ -19,15 +19,11 @@ export default new Vuex.Store({
        } 
     },
     mutations: {
-        setSchool(state,name) {
+        setSchoolObject(state,school) {
             console.log("SetSchool");
-            console.log(name);
-            state.school.name = name;
-        },
-        setTeacher(state,name) {
-            console.log("SetTeacher");
-            console.log(name);
-            state.teacher.name = name;
+            console.log(school.name);
+            state.school.name = school.name;
+            state.school.key = school.key;
         },
         setTeacherObject(state,teacher) {
             console.log("SetTeacherObject");
@@ -40,6 +36,17 @@ export default new Vuex.Store({
             console.log(student.name);
             state.student.name = student.name;
             state.student.id = student.id;
+        },
+        resetStudentObject(state) {
+            console.log("resetStudent");
+            state.student.name = null;
+            state.student.id = null;
+        },
+        resetTeacherObject(state) {
+            console.log("resetTeacher");
+            state.teacher.name = null;
+            state.teacher.id = null;
         }
+
     }
 })

@@ -5,7 +5,7 @@
         <th></th>
         <th colspan="3">New Lesson</th>
         <th colspan="1">Attached Lesson</th>
-        <th colspan="2">General Revision</th>
+        <th colspan="3">General Revision</th>
       </tr>
       <tr>
         <th>Date</th>
@@ -14,6 +14,7 @@
         <th>Page</th>
         <th>Portion</th>
         <th>Juz</th>
+        <th>Portion</th>
         <th>Mistakes</th>
       </tr>
 
@@ -37,10 +38,13 @@
           {{ record.NewLesson.page }}
         </td>
         <td>
-          {{ record.CurrentLesson.portion }}
+          {{ portions[record.CurrentLesson.portion] }}
         </td>
         <td>
           {{ record.Revision.juz }}
+        </td>
+        <td>
+          {{ portions[record.Revision.portion] }}
         </td>
         <td>
           {{ record.Revision.mistakes }}
@@ -61,6 +65,7 @@ import {
   DefaultNewLesson,
   DefaultCurrentLesson,
   DefaultRevision,
+  portions
 } from "../main";
 
 export default {
@@ -68,6 +73,7 @@ export default {
   data() {
     return {
       records: [],
+      portions:portions
     };
   },
   created() {
@@ -75,6 +81,8 @@ export default {
     var sname = this.$route.params.student_name;
     this.$store.commit("setStudentObject", { name: sname, id: sid });
     const api_url = "http://localhost:8081/tracker/" + sid;
+    console.log(api_url);
+    this.portions = portions;
     axios.get(api_url).then((x) => {
       console.log(x);
       this.records = x.data;

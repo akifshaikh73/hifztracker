@@ -37,3 +37,13 @@ export function DefaultRevision() {
 }
 
 
+export let portions = {
+  "h1":"1st Half",
+  "h2":"2nd Half",
+  "q1":"1st Quarter",
+  "q2":"2nd Quarter",
+  "q3":"3rd Quarter",
+  "q4":"4th Quarter",
+  "full" : "Full Juz",
+  "current": "Current Juz"
+}

@@ -2,7 +2,7 @@
 
     <table align="center">
       <tr>
-        <th>School Name</th>        
+        <th>Seminary Name</th>        
         <!--td>Location</th-->        
       <tr>
       <tr v-for='school in schools' v-bind:key='school.key'>
@@ -37,4 +37,6 @@ export default {
     });
   },
 };
+
+
 </script>
