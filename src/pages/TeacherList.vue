@@ -1,5 +1,5 @@
 <template>
-  <table align="center">
+  <table align="center" v-if="$store.state.login.role == 'super_admin' || $store.state.login.role == 'admin'">
     <tr>
       <th>Teacher</th>
     </tr>
@@ -8,14 +8,18 @@
 
     <tr v-for="teacher in teachers" :key="teacher.id">
       <td>
-        <router-link :to="{ name: 'students', params: { tid: teacher.id,tname : teacher.name } }">
+        <router-link :to="{ name: 'students', params: { tid: teacher.id } }">
+        <!--router-link :to="{ name: 'students', params: { tid: teacher.id,tname : teacher.name } }"-->
           {{ teacher.name }}
         </router-link>
       </td>
     </tr>
     <tr>
       <td>
+        Name:
         <input  type="text"   v-model="newTeacher"/>
+        ID:
+        <input  type="text"   v-model="teacherID"/>
       </td>  
     </tr>
     <tr>  
@@ -38,19 +42,24 @@ export default {
   data() {
     return {
       teachers: [],
-      newTeacher : "New Teacher"
+      newTeacher : "New Teacher",
+      teacherID : "id"
+
     };
   },
   created() {
+    if(this.$store.state.login.role == '')
+      this.$router.push("/login");
     var schoolkey = this.$route.params.skey;
-    var schoolName = this.$route.params.sname;
-    this.$store.commit('setSchoolObject',{key: schoolkey,name: schoolName});
     this.$store.commit('resetTeacherObject');
     this.$store.commit('resetStudentObject');
     const api_url = "http://localhost:8081/school/" + schoolkey + "/teachers";
     axios.get(api_url).then((x) => {
       console.log(x);
-      this.teachers = x.data;
+      var schoolName = x.data.filter((student) => student.docType == "school")[0].name;
+      console.log(schoolName);
+      this.$store.commit('setSchoolObject',{key: schoolkey,name: schoolName});
+      this.teachers = x.data.filter((student) => student.docType == "teacher");
       this.newTeacher = "";
       console.log("with new Teacher:"+this);
     });
@@ -70,6 +79,7 @@ export default {
       var teacherItem = {
         docType: "teacher",
         name: this.newTeacher,
+        key: this.teacherID,
         program: "hifz",
         school: this.$store.state.school.name
       };

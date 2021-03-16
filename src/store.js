@@ -4,34 +4,65 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-    state : {
-       school:{
-           key:'usem',
-           name:'Uthman Seminary'
-       },
-       teacher : {
-           id:'',
-           name:''
-       },
-       student :{
-           id:'',
-           name:''
-       } 
+    state: {
+        school: {
+            key: 'usem',
+            name: 'Uthman Seminary'
+        },
+        teacher: {
+            id: '',
+            name: ''
+        },
+        student: {
+            id: '',
+            name: ''
+        },
+        login: {
+            role: '',
+            school: '',
+            id: '',
+            password: ''
+        }
     },
+    getters: {
+        // ...
+        Role: (state) => {
+          return state.login.role.replace(
+            /\w\S*/g,
+            function(txt) {
+              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            }
+          );
+        }
+      },
     mutations: {
-        setSchoolObject(state,school) {
+        setLogin(state, loginContext) {
+            console.log("SetLogin");
+            state.login.role = loginContext.role;
+            state.login.school = loginContext.school;
+            state.login.id = loginContext.id;
+            state.login.password = loginContext.password;
+        },
+        resetLoginContext(state) {
+            console.log("ReSet");
+            state.login.role = "";
+            state.login.school = "";
+            state.login.id = "";
+            state.login.password = "";
+        },
+        setSchoolObject(state, school) {
             console.log("SetSchool");
             console.log(school.name);
             state.school.name = school.name;
             state.school.key = school.key;
         },
-        setTeacherObject(state,teacher) {
+        setTeacherObject(state, teacher) {
             console.log("SetTeacherObject");
             console.log(teacher.name);
             state.teacher.name = teacher.name;
             state.teacher.id = teacher.id;
         },
-        setStudentObject(state,student) {
+        setStudentObject(state, student) {
             console.log("SetStudent");
             console.log(student.name);
             state.student.name = student.name;

@@ -2,29 +2,30 @@
   <table align="center">
     <tr>
       <th>Student</th>
-      <th>Teacher</th>
-      <th>Action</th>
+      <th v-if="$store.state.login.role == 'admin'">Teacher</th>
+      <th v-if="$store.state.login.role == 'admin'">Action</th>
     </tr>
     <tr v-for="s in students" :key="s.id">
       <td>
         <router-link
           :to="{
             name: 'record_list',
-            params: { student_id: s.id, student_name: s.name },
+            params: { student_id: s.id },
           }"
         >
           {{ s.name }}
         </router-link>
       </td>
-      <td>
+      <td v-if="$store.state.login.role == 'admin'">
         <input type="text" v-model="s.teacher" />
       </td>
-      <td>
-        <button @click="assignTeacherToStudent(s.id,s.teacher)">Assign</button>
+      <td v-if="$store.state.login.role == 'admin'">
+        <button @click="assignTeacherToStudent(s.id, s.teacher)">Assign</button>
       </td>
     </tr>
-    <tr>
+    <tr v-if="$store.state.login.role == 'admin'">
       <td>
+        Name:
         <input type="text" v-model="newStudent" />
       </td>
       <td>
@@ -38,12 +39,9 @@
 
 //import StudentTracker from './components/StudentTracker.vue'
 import axios from "axios";
-import DefaultNewLesson from "../main";
-import DefaultCurrentLesson from "../main";
-import DefaultRevision from "../main";
 
 export default {
-  name: "App",
+  name: "StudentList",
   data() {
     return {
       students: [],
@@ -51,6 +49,8 @@ export default {
     };
   },
   created() {
+    if(this.$store.state.login.role == '')
+      this.$router.push("/login");
     var api_url = "";
     var tid = this.$route.params.tid;
     var tname = this.$route.params.tname;
@@ -68,7 +68,14 @@ export default {
 
     axios.get(api_url).then((x) => {
       console.log(x);
-      this.students = x.data;
+      this.students = x.data.filter((student) => student.docType == "student");
+      var teachers = x.data.filter((student) => student.docType == "teacher");
+      if (teachers.length > 0)
+        this.$store.commit("setTeacherObject", {
+          id: tid,
+          name: teachers[0].name,
+        });
+
       this.newStudent = "";
     });
   },
@@ -90,12 +97,14 @@ export default {
         this.$router.push({ name: "students" });
       });
     },
-    assignTeacherToStudent(sid,teacher_name) {
+    assignTeacherToStudent(sid, teacher_name) {
       var schoolkey = this.$store.state.school.key;
       const api_url = "http://localhost:8081/school/" + schoolkey + "/student/";
       console.log(api_url);
-      console.log(sid+":"+teacher_name);
-      var selectedStudent = this.students.filter(student => student.id == sid)[0];
+      console.log(sid + ":" + teacher_name);
+      var selectedStudent = this.students.filter(
+        (student) => student.id == sid
+      )[0];
       console.log(selectedStudent);
       var studentItem = {
         id: sid,

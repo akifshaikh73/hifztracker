@@ -3,53 +3,55 @@
     <img alt="Vue logo" src="./assets/MU.png" />
     <!--HelloWorld msg="Welcome to Your Vue.js App" /-->
 
-    <div class="nav">
+    <div class="nav" v-if="$store.state.login.role == 'super_admin'">
       <router-link to="/schools">Schools</router-link>
-      -
-      <router-link to="/teachers/usem/Uthman Seminary">Teachers</router-link>
-      -
-      <router-link to="/students/usem">Students</router-link>
     </div>
-    <div>
-      <!--router-link to="/teachers/{{this.$store.school.key}}/{{this.$store.school.name}}">{{ this.$store.state.school.name}}</router-link-->
+    <div v-if="$store.state.login.role != ''">
+      Role:{{$store.getters.Role}}
+    </div>
 
-      <router-link
-        :to="{
-          name: 'teachers',
-          params: {
-            skey: this.$store.state.school.key,
-            sname: this.$store.state.school.name,
-          },
-        }"
-      >
-        {{ this.$store.state.school.name }}
-      </router-link>
-
-      -
-      <router-link
-        :to="{
-          name: 'students',
-          params: {
-            tid: this.$store.state.teacher.id,
-            tname: this.$store.state.teacher.name,
-          },
-        }"
-      >
-        {{ this.$store.state.teacher.name }}
-      </router-link>
-
-      -
-      <router-link
-        :to="{
-          name: 'record_list',
-          params: {
-            student_id: this.$store.state.student.id,
-            student_name: this.$store.state.student.name,
-          },
-        }"
-      >
-        {{ this.$store.state.student.name }}
-      </router-link>
+    <div      v-if="$store.state.login.role != '' "    >
+      <div v-if="$store.state.login.role == 'admin'">
+        <router-link
+          :to="{
+            name: 'teachers',
+            params: {
+              skey: this.$store.state.school.key
+            },
+          }"
+        >
+          {{ this.$store.state.school.name }}
+        </router-link>
+      </div>
+      <div v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher'">
+        <router-link
+          :to="{
+            name: 'students',
+            params: {
+              tid: this.$store.state.teacher.id,
+              tname: this.$store.state.teacher.name,
+            },
+          }"
+        >
+          {{ this.$store.state.teacher.name }}
+        </router-link>
+      </div>
+      <div v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher' || $store.state.login.role == 'student'">
+        <router-link
+          :to="{
+            name: 'record_list',
+            params: {
+              student_id: this.$store.state.student.id,
+              student_name: this.$store.state.student.name,
+            },
+          }"
+        >
+          {{ this.$store.state.student.name }}
+        </router-link>
+      </div>
+    </div>
+    <div v-if="$store.state.login.role != ''">
+      <a href="#" v-on:click="logOut">Logout</a>
     </div>
 
     <router-view></router-view>
@@ -61,20 +63,22 @@
 <script>
 /* eslint-disable vue/no-unused-components, no-unused-vars */
 
-
-import HelloWorld from "./components/HelloWorld.vue";
-
 export default {
   name: "App",
-  components: {
-    HelloWorld,
-  },
   data() {
-    return {
-      students: [],
-    };
+    return {};
   },
-  created() {},
+  mounted() {
+    //var role = this.$router.query.role;
+    console.log(this.$route.query.role);
+  },
+  methods: {
+    logOut(event) {
+      console.log(this.$store.state.role);
+      this.$store.commit("resetLoginContext");
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 
@@ -114,7 +118,6 @@ td {
   background: #fafafa;
   text-align: center;
 }
-
 
 /* Cells in even rows (2,4,6...) are one color */
 tr:nth-child(even) td {

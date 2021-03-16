@@ -7,7 +7,7 @@
       <tr>
       <tr v-for='school in schools' v-bind:key='school.key'>
         <td>
-        <router-link :to="{ name: 'teachers' , params: {skey:school.key, sname : school.name}}">    
+        <router-link :to="{ name: 'teachers' , params: {skey:school.key}}">    
             {{school.name}}
         </router-link>
         </td>

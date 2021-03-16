@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import App from './App'
+import Login from './pages/Login'
 import SchoolList from './pages/SchoolList'
 import TeacherList from './pages/TeacherList'
 import StudentList from './pages/StudentList'
@@ -13,21 +15,31 @@ export default new Router(
   {
     routes: [
       {
+        path: '/login',
+        query:{role:''},
+        component: Login
+      },
+      {
+        path: '/home',
+        query:{role:''},
+        component: App
+      },
+      {
         path: '/schools',
         component: SchoolList
       },
       {
-        path: '/teachers/:skey/:sname?',
+        path: '/teachers/:skey/',
         name: 'teachers',
         component: TeacherList
       },
       {
-        path: '/students/:tid/:tname?',
+        path: '/students/:tid/',
         name: 'students',
         component: StudentList
       },
       {
-        path: '/student/records/:student_id/:student_name?',
+        path: '/student/records/:student_id/',
         name: 'record_list',
         component: StudentRecordList
       },

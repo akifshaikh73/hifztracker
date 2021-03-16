@@ -31,6 +31,7 @@ export function DefaultCurrentLesson() {
 
 export function DefaultRevision() {
   return {
+    portion: "full",
     juz: 1,
     mistakes: 0,
   };

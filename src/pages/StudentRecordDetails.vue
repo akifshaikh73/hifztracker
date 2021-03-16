@@ -2,7 +2,7 @@
   <div>
     <br />
       <p v-if="record.errors">
-          <b v-if="record.errors.length">Please correct the following error(s):</b>
+          <b v-if="record.errors.length">Please fix the error(s):</b>
           <ul>
             <li v-for="error in record.errors" :key="error.id">{{ error }}</li>
           </ul>
@@ -13,6 +13,10 @@
       <div>
         <span>Date: </span>
         <input type="text" v-model="record.date" required />
+      </div>
+      <div>
+        <span>Comment: </span>
+        <input type="text" v-model="record.comment" required />
       </div>
 
       <h1>New Lesson</h1>
@@ -99,7 +103,7 @@
 
       <br />
 
-      <div>
+      <div v-if="$store.state.login.role == 'teacher'">
         <button @click.prevent="submitRecordDetail">Submit</button>
       </div>
     </form>
@@ -109,7 +113,6 @@
 /* eslint-disable vue/no-unused-components, no-unused-vars */
 
 import axios from "axios";
-import Route from "vue-router";
 import {
   DefaultNewLesson,
   DefaultCurrentLesson,
@@ -123,7 +126,6 @@ export default {
     var datestring =
       d.getMonth() + 1 + "-" + d.getDate() + "-" + d.getFullYear();
     console.log("data():" + datestring);
-    console.log("data() record:" + this.record);
     if (this.record == undefined)
       return {
         record: {
@@ -142,19 +144,25 @@ export default {
   },
   created() {
     var rid = this.$route.params.record_id;
-    const api_url = "http://localhost:8081/tracker/" + rid;
-    axios.get(api_url).then((x) => {
-      console.log("created():" + x);
-      this.record = x.data;
-      this.record.errors = [];
+    console.log(rid);
+    if(rid != 'new') { // New Records will not have a rid
+      const api_url = "http://localhost:8081/record/" + rid;
+      axios.get(api_url).then((x) => {
+        console.log("created():" + x.data);
+        this.record = x.data;
+        this.record.errors = [];
 
-      if (this.record.CurrentLesson == undefined) {
-        this.record.CurrentLesson = DefaultCurrentLesson();
-      }
-      if (this.record.Revision == undefined) {
-        this.record.Revision = DefaultRevision();
-      }
-    });
+        if (this.record.NewLesson == undefined) {
+          this.record.CurrentLesson = DefaultCurrentLesson();
+        }
+        if (this.record.CurrentLesson == undefined) {
+          this.record.CurrentLesson = DefaultCurrentLesson();
+        }
+        if (this.record.Revision == undefined) {
+          this.record.Revision = DefaultRevision();
+        }
+      });
+    }
   },
   methods: {
     submitRecordDetail() {
@@ -171,7 +179,7 @@ export default {
         axios.post(api_url, this.record).then((x) => {
           console.log(x);
         });
-        this.$router.push("/student/records/"+this.$store.state.student.id+"/"+this.$store.state.student.name);
+        this.$router.push("/student/records/"+this.$store.state.student.id);
       }
     },
   },
