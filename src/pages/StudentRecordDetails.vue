@@ -173,7 +173,7 @@ export default {
         this.record.errors.push("1 < Juz < 30");
       } else {
         delete this.record.errors;
-        const api_url = "http://localhost:8081/tracker/" + sid + "::" + date;
+        const api_url = "http://localhost:8081/record/" + sid + "::" + date;
         console.log(api_url);
         console.log(this.record);
         axios.post(api_url, this.record).then((x) => {

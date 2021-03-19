@@ -76,6 +76,8 @@ export default {
     logOut(event) {
       console.log(this.$store.state.role);
       this.$store.commit("resetLoginContext");
+      this.$store.commit("resetStudentObject");
+      this.$store.commit("resetTeacherObject");
       this.$router.push("/login");
     },
   },
