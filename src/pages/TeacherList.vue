@@ -35,7 +35,7 @@
 /* eslint-disable vue/no-unused-components, no-unused-vars */
 
 import axios from "axios";
-import Route from "vue-router";
+import common from "../tracker_common";
 
 export default {
   name: "Teachers",
@@ -53,7 +53,7 @@ export default {
     var schoolkey = this.$route.params.skey;
     this.$store.commit('resetTeacherObject');
     this.$store.commit('resetStudentObject');
-    const api_url = "http://localhost:8081/school/" + schoolkey + "/teachers";
+    const api_url = common.api_base + "school/" + schoolkey + "/teachers";
     axios.get(api_url).then((x) => {
       console.log(x);
       var schoolName = x.data.filter((student) => student.docType == "school")[0].name;
@@ -84,7 +84,7 @@ export default {
         school: this.$store.state.school.name
       };
 
-      const api_url = "http://localhost:8081/school/" + schoolkey + "/teacher/";
+      const api_url = common.api_base + "school/" + schoolkey + "/teacher/";
       console.log(api_url);
       console.log(this);
       axios.post(api_url, teacherItem).then((x) => {

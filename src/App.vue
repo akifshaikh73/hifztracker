@@ -12,6 +12,7 @@
 
     <div      v-if="$store.state.login.role != '' "    >
       <div v-if="$store.state.login.role == 'admin'">
+        School:
         <router-link
           :to="{
             name: 'teachers',

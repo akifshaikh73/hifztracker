@@ -69,6 +69,8 @@ import {
   portions
 } from "../main";
 
+import common from "../tracker_common";
+
 export default {
   name: "Records",
   data() {
@@ -88,7 +90,7 @@ export default {
   },
   created() {
     var sid = this.$route.params.student_id;
-    const api_url = "http://localhost:8081/records/" + sid;
+    const api_url = common.api_base+ "records/" + sid;
     console.log(api_url);
     console.log(this.m_portions);
     axios.get(api_url).then((x) => {

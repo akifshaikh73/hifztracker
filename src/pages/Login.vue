@@ -30,6 +30,7 @@
 /* eslint-disable vue/no-unused-components, no-unused-vars */
 
 import axios from "axios";
+import common from "../tracker_common"
 
 export default {
   name: "Login",
@@ -49,7 +50,8 @@ export default {
   created() {},
   methods: {
     login(loginRecord) {
-      const api_url = "http://localhost:8081/login/";
+      const api_url = common.api_base + "login/";
+      console.log(api_url);
       return new Promise((resolve, reject) => {
         axios.post(api_url, this.record).then((response) => {
           if (loginRecord.role == "teacher") {
@@ -71,7 +73,7 @@ export default {
               adminItem.key == loginRecord.id && adminItem.password == loginRecord.password
             ) {
               loginRecord.loggedIn = true;
-              resolve();
+              resolve(adminItem);
             } else {
               reject();
             }
@@ -84,11 +86,14 @@ export default {
               schoolItem.admin.id == loginRecord.id && schoolItem.admin.password == loginRecord.password
             ) {
               loginRecord.loggedIn = true;
-              resolve();
+              resolve(schoolItem);
             } else {
               reject();
             }
           }
+        }).catch((error)=>{
+          console.error(error);
+          reject(error);
         });
       });
     },
@@ -108,6 +113,7 @@ export default {
             this.$store.commit("setLogin", {
               role: this.record.role,
               school: this.record.school,
+              name: data.name,
               id: this.record.id,
               password: this.record.password,
             });
@@ -119,8 +125,9 @@ export default {
               this.$router.push(path);
             }
           })
-          .catch(() => {
+          .catch((error) => {
             console.log("Login failed+" + this.record);
+            console.error(error);
             this.$store.commit("resetLoginContext");
             this.record.error = true;
             this.record.errorMessage = "Invalid Login or Password";

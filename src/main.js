@@ -48,3 +48,5 @@ export let portions = {
   "full" : "Full Juz",
   "current": "Current Juz"
 }
+
+

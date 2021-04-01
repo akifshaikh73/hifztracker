@@ -37,11 +37,13 @@ export default new Vuex.Store({
       },
     mutations: {
         setLogin(state, loginContext) {
-            console.log("SetLogin");
+            console.log("SetLogin:"+loginContext);
             state.login.role = loginContext.role;
             state.login.school = loginContext.school;
             state.login.id = loginContext.id;
             state.login.password = loginContext.password;
+            state.school.key = loginContext.school;
+            state.school.name = loginContext.name;
         },
         resetLoginContext(state) {
             console.log("ReSet");

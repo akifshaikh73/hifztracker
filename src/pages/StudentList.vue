@@ -39,6 +39,7 @@
 
 //import StudentTracker from './components/StudentTracker.vue'
 import axios from "axios";
+import common from "../tracker_common"
 
 export default {
   name: "StudentList",
@@ -58,11 +59,11 @@ export default {
     console.log(tname);
     if (tid.indexOf("teacher") == 0) {
       // Get students for a teacher
-      api_url = "http://localhost:8081/students/teacher/" + tid;
+      api_url = common.api_base + "students/teacher/" + tid;
       this.$store.commit("setTeacherObject", { id: tid, name: tname });
     } else {
       // get students of a school
-      api_url = "http://localhost:8081/students/school/" + tid;
+      api_url = common.api_base + "students/school/" + tid;
     }
     this.$store.commit("resetStudentObject");
 
@@ -82,7 +83,7 @@ export default {
   methods: {
     addNewStudent() {
       var schoolkey = this.$store.state.school.key;
-      const api_url = "http://localhost:8081/school/" + schoolkey + "/student/";
+      const api_url = common.api_base+ "school/" + schoolkey + "/student/";
       console.log(api_url);
       console.log(this);
       var studentItem = {
@@ -99,7 +100,7 @@ export default {
     },
     assignTeacherToStudent(sid, teacher_name) {
       var schoolkey = this.$store.state.school.key;
-      const api_url = "http://localhost:8081/school/" + schoolkey + "/student/";
+      const api_url = common.api_base + "school/" + schoolkey + "/student/";
       console.log(api_url);
       console.log(sid + ":" + teacher_name);
       var selectedStudent = this.students.filter(

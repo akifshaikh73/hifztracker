@@ -119,6 +119,11 @@ import {
   DefaultRevision,
 } from "../main";
 
+import common from "../tracker_common"
+
+const base_url = common.api_base + "record/";
+
+
 export default {
   name: "RecordDetail",
   data() {
@@ -146,7 +151,7 @@ export default {
     var rid = this.$route.params.record_id;
     console.log(rid);
     if(rid != 'new') { // New Records will not have a rid
-      const api_url = "http://localhost:8081/record/" + rid;
+      const api_url = base_url + rid;
       axios.get(api_url).then((x) => {
         console.log("created():" + x.data);
         this.record = x.data;
@@ -173,7 +178,7 @@ export default {
         this.record.errors.push("1 < Juz < 30");
       } else {
         delete this.record.errors;
-        const api_url = "http://localhost:8081/record/" + sid + "::" + date;
+        const api_url = base_url + sid + "::" + date;
         console.log(api_url);
         console.log(this.record);
         axios.post(api_url, this.record).then((x) => {
