@@ -10,7 +10,7 @@
         <router-link
           :to="{
             name: 'record_list',
-            params: { student_id: s.id },
+            params: { skey:$store.state.school.key, student_id: s.id },
           }"
         >
           {{ s.name }}
@@ -57,20 +57,21 @@ export default {
     var tname = this.$route.params.tname;
     console.log("teachers id:" + tid);
     console.log(tname);
-    if (tid.indexOf("teacher") == 0) {
-      // Get students for a teacher
-      api_url = common.api_base + "students/teacher/" + tid;
-      this.$store.commit("setTeacherObject", { id: tid, name: tname });
-    } else {
+    var schoolkey = this.$store.state.school.key;
+
+    // Get students for a teacher
+    api_url = common.api_base + "students/"+schoolkey+"/teacher/" + tid;
+    this.$store.commit("setTeacherObject", { id: tid, name: tname });
+     /*else { //TODO
       // get students of a school
       api_url = common.api_base + "students/school/" + tid;
-    }
+    }*/
     this.$store.commit("resetStudentObject");
 
     axios.get(api_url).then((x) => {
       console.log(x);
-      this.students = x.data.filter((student) => student.docType == "student");
-      var teachers = x.data.filter((student) => student.docType == "teacher");
+      this.students = x.data.filter((student) => student.docType == "student::"+schoolkey);
+      var teachers = x.data.filter((student) => student.docType == "teacher::"+schoolkey);
       if (teachers.length > 0)
         this.$store.commit("setTeacherObject", {
           id: tid,

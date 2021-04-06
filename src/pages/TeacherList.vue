@@ -59,7 +59,7 @@ export default {
       var schoolName = x.data.filter((student) => student.docType == "school")[0].name;
       console.log(schoolName);
       this.$store.commit('setSchoolObject',{key: schoolkey,name: schoolName});
-      this.teachers = x.data.filter((student) => student.docType == "teacher");
+      this.teachers = x.data.filter((student) => student.docType != "school"); // docType == teacher::usem eg
       this.newTeacher = "";
       console.log("with new Teacher:"+this);
     });

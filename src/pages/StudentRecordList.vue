@@ -90,13 +90,14 @@ export default {
   },
   created() {
     var sid = this.$route.params.student_id;
-    const api_url = common.api_base+ "records/" + sid;
+    var skey = this.$route.params.skey;
+    const api_url = `${common.api_base}records/${skey}/${sid}`;
     console.log(api_url);
     console.log(this.m_portions);
     axios.get(api_url).then((x) => {
       console.log(x);
-      this.records = x.data.filter(record => record.docType == 'dtracker');
-      var students = x.data.filter(record => record.docType == 'student');
+      this.records = x.data.filter(record => record.docType == 'dtracker::'+skey);
+      var students = x.data.filter(record => record.docType == 'student::'+skey);
       var sname = '';
       if(students.length > 0) {
         sname = students[0].name;

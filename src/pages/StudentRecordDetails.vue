@@ -172,13 +172,16 @@ export default {
   methods: {
     submitRecordDetail() {
       var sid = this.$store.state.student.id;
+      var skey = this.$store.state.school.key;
       var date = this.record.date;
       this.record.errors = [];
       if (this.record.NewLesson.juz > 30 || this.record.Revision.juz > 30) {
         this.record.errors.push("1 < Juz < 30");
       } else {
         delete this.record.errors;
-        const api_url = base_url + sid + "::" + date;
+        //const api_url = base_url + sid + "::" + date;
+        const api_url = `${common.api_base}record/${skey}/${sid}::${date}`;
+
         console.log(api_url);
         console.log(this.record);
         axios.post(api_url, this.record).then((x) => {
