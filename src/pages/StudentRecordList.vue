@@ -27,7 +27,7 @@
           {{m_portions[record.CurrentLesson.portion]}}
         </div-->  
         <td>
-          <router-link :to="{ name: 'record_detail', params: { record_id: record.id } }">
+          <router-link :to="{ name: 'record_detail', params: {skey:$store.state.school.key, record_id: record.id } }">
             {{ record.date }}
           </router-link>
         </td>

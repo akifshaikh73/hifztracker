@@ -121,7 +121,6 @@ import {
 
 import common from "../tracker_common"
 
-const base_url = common.api_base + "record/";
 
 
 export default {
@@ -149,9 +148,12 @@ export default {
   },
   created() {
     var rid = this.$route.params.record_id;
+    var skey = this.$route.params.skey;
+
     console.log(rid);
     if(rid != 'new') { // New Records will not have a rid
-      const api_url = base_url + rid;
+      const api_url = `${common.api_base}record/${skey}/${rid}`;
+
       axios.get(api_url).then((x) => {
         console.log("created():" + x.data);
         this.record = x.data;
@@ -179,7 +181,6 @@ export default {
         this.record.errors.push("1 < Juz < 30");
       } else {
         delete this.record.errors;
-        //const api_url = base_url + sid + "::" + date;
         const api_url = `${common.api_base}record/${skey}/${sid}::${date}`;
 
         console.log(api_url);
@@ -187,7 +188,8 @@ export default {
         axios.post(api_url, this.record).then((x) => {
           console.log(x);
         });
-        this.$router.push("/student/records/"+this.$store.state.student.id);
+        //this.$router.push("/student/records/"+skey+"/"+this.$store.state.student.id);
+        this.$router.push(`/student/records/${skey}/${this.$store.state.student.id}`);
       }
     },
   },

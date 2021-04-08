@@ -77,14 +77,14 @@ export default {
     addNewTeacher() {
       var schoolkey = this.$route.params.skey;
       var teacherItem = {
-        docType: "teacher",
+        docType: "teacher::"+schoolkey,
         name: this.newTeacher,
         key: this.teacherID,
         program: "hifz",
         school: this.$store.state.school.name
       };
 
-      const api_url = common.api_base + "school/" + schoolkey + "/teacher/";
+      const api_url = `${common.api_base}school/${schoolkey}/teacher/`;
       console.log(api_url);
       console.log(this);
       axios.post(api_url, teacherItem).then((x) => {

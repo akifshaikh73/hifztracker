@@ -44,7 +44,7 @@ export default new Router(
         component: StudentRecordList
       },
       {
-        path: '/student/detail/:record_id',
+        path: '/student/detail/:skey/:record_id',
         name: 'record_detail',
         component: StudentRecordDetails
       },
