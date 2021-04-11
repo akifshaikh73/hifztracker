@@ -70,8 +70,7 @@ export default {
     return {};
   },
   mounted() {
-    //var role = this.$router.query.role;
-    console.log(this.$route.query.role);
+    //console.log(this.$route.query.role);
   },
   methods: {
     logOut(event) {

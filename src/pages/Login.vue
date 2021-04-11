@@ -22,7 +22,7 @@
     <div>
       <button @click.prevent="submitLogin">Submit</button>
     </div>
-    <div v-if="record.error">{{ record.errorMessage }}</div>
+    <div v-if="error">{{ errorMessage }}</div>
   </form>
 </div>
 </template>
@@ -41,10 +41,10 @@ export default {
         role: "teacher",
         id: "",
         password: "",
-        loggedIn: false,
-        error: false,
-        errorMessage: "",
       },
+      error: false,
+      errorMessage: "",
+      loggedIn: false,
     };
   },
   created() {},
@@ -59,10 +59,10 @@ export default {
             if (
               response.data.Items.length == 1 
             ) {
-              loginRecord.loggedIn = true;
+              this.loggedIn = true;
               resolve(teacherItem);
             } else {
-              reject();
+              reject("Invalid Login");
             }
           }
           if (loginRecord.role == "super_admin") {
@@ -72,10 +72,10 @@ export default {
             if (
               adminItem.key == loginRecord.id && adminItem.password == loginRecord.password
             ) {
-              loginRecord.loggedIn = true;
+              this.loggedIn = true;
               resolve(adminItem);
             } else {
-              reject();
+              reject("Invalid Login");
             }
           }
           if (loginRecord.role == "admin") {
@@ -85,10 +85,10 @@ export default {
             if (
               schoolItem.admin.id == loginRecord.id && schoolItem.admin.password == loginRecord.password
             ) {
-              loginRecord.loggedIn = true;
+              this.loggedIn = true;
               resolve(schoolItem);
             } else {
-              reject();
+              reject("Invalid Login");
             }
           }
         }).catch((error)=>{
@@ -98,18 +98,18 @@ export default {
       });
     },
     logout() {
-      this.record.loggedIn = false;
+      this.loggedIn = false;
     },
     isAuthenticated() {
-      return this.record.loggedIn;
+      return this.loggedIn;
     },
     submitLogin() {
-      this.record.errors = [];
+      this.errors = [];
       if (this.record.role != "") {
         this.login(this.record)
           .then((data) => {
             console.log("Login successful+" + this.record);
-            this.record.error = false;
+            this.error = false;
             this.$store.commit("setLogin", {
               role: this.record.role,
               school: this.record.school,
@@ -126,11 +126,13 @@ export default {
             }
           })
           .catch((error) => {
-            console.log("Login failed+" + this.record);
             console.error(error);
             this.$store.commit("resetLoginContext");
-            this.record.error = true;
-            this.record.errorMessage = "Invalid Login or Password";
+            this.error = true;
+            if(typeof(error) == 'string')
+              this.errorMessage = error;
+            else 
+              this.errorMessage = error.response.data;
           });
       }
     },
