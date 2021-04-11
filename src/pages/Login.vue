@@ -120,7 +120,7 @@ export default {
             if (this.record.role == "teacher") {
               console.log(data);
               var path =
-                "/students/" +data.id;
+                "/students/" +data.SK;
               console.log(path);
               this.$router.push(path);
             }

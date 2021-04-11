@@ -11,6 +11,7 @@ export default new Vuex.Store({
         },
         teacher: {
             id: '',
+            loginid: '',
             name: ''
         },
         student: {
@@ -63,6 +64,7 @@ export default new Vuex.Store({
             console.log(teacher.name);
             state.teacher.name = teacher.name;
             state.teacher.id = teacher.id;
+            state.teacher.loginid = teacher.loginid;
         },
         setStudentObject(state, student) {
             console.log("SetStudent");

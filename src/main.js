@@ -13,19 +13,16 @@ new Vue({
 /* eslint-disable vue/no-unused-components, no-unused-vars */
 export function DefaultNewLesson() {
   return {
-    page: 1,
     juz: 1,
-    mistakes: 0,
-    assigned: false,
-    completed: false,
+    lines: 1,
+    track : "P"
   };
 }
 
 export function DefaultCurrentLesson() {
   return {
     portion: "current",
-    assigned: false,
-    recited: false
+    track: "P"
   };
 }
 
@@ -33,7 +30,8 @@ export function DefaultRevision() {
   return {
     portion: "full",
     juz: 1,
-    mistakes: 0,
+    mistakes: "0-1",
+    track: "P"
   };
 }
 

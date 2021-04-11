@@ -2,25 +2,33 @@
   <table align="center" v-if="$store.state.login.role == 'super_admin' || $store.state.login.role == 'admin'">
     <tr>
       <th>Teacher</th>
+      <th>Login ID</th>
+      <th>Action</th>
     </tr>
 
     <tr></tr>
 
     <tr v-for="teacher in teachers" :key="teacher.id">
       <td>
-        <router-link :to="{ name: 'students', params: { tid: teacher.id } }">
+        <router-link :to="{ name: 'students', params: { tid: teacher.SK } }">
         <!--router-link :to="{ name: 'students', params: { tid: teacher.id,tname : teacher.name } }"-->
           {{ teacher.name }}
         </router-link>
+      </td>
+      <td>
+        {{teacher.id}}
       </td>
     </tr>
     <tr>
       <td>
         Name:
         <input  type="text"   v-model="newTeacher"/>
-        ID:
+        Login ID:
         <input  type="text"   v-model="teacherID"/>
       </td>  
+      <td>
+        <button @click="deleteTeacher(teacher.SK)">Delete</button>
+      </td>
     </tr>
     <tr>  
       <td>
@@ -56,10 +64,10 @@ export default {
     const api_url = common.api_base + "school/" + schoolkey + "/teachers";
     axios.get(api_url).then((x) => {
       console.log(x);
-      var schoolName = x.data.filter((student) => student.docType == "school")[0].name;
+      var schoolName = x.data.filter((student) => student.PK == "school")[0].name;
       console.log(schoolName);
       this.$store.commit('setSchoolObject',{key: schoolkey,name: schoolName});
-      this.teachers = x.data.filter((student) => student.docType != "school"); // docType == teacher::usem eg
+      this.teachers = x.data.filter((student) => student.PK != "school"); 
       this.newTeacher = "";
       console.log("with new Teacher:"+this);
     });
@@ -74,12 +82,23 @@ export default {
   }
   */
   methods: {
+    deleteTeacher(teacherSK) {
+      var schoolkey = this.$route.params.skey;
+      const api_url = `${common.api_base}school/${schoolkey}/teacher/teacherSK`;
+      console.log(api_url);
+      console.log(this);
+      axios.delete(api_url).then((x) => {
+        console.log(x);
+      });
+    },
+  
     addNewTeacher() {
       var schoolkey = this.$route.params.skey;
       var teacherItem = {
-        docType: "teacher::"+schoolkey,
+        PK: "teacher::"+schoolkey,
         name: this.newTeacher,
-        key: this.teacherID,
+        LSK: this.teacherID,
+        id: this.teacherID,
         program: "hifz",
         school: this.$store.state.school.name
       };

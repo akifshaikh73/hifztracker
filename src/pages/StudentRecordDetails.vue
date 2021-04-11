@@ -12,7 +12,7 @@
     <form @submit.prevent="submitRecordDetail">
       <div>
         <span>Date: </span>
-        <input type="text" v-model="record.date" required />
+        <input type="text" v-model="record.SK" required />
       </div>
       <div>
         <span>Comment: </span>
@@ -24,50 +24,40 @@
 
       <div>
         <label>Juz: </label>
-        <input  v-model="record.NewLesson.juz" required :min="1" :max="30"/>
+        <input  v-model="record.NewLesson.juz" type="number" required :min="1" :max="30"/>
       </div>
       <div>
-        <span>Mistakes:</span>
-        <input type="number" v-model="record.NewLesson.mistakes" />
+        <span>Lines:</span>
+        <input type="number" v-model="record.NewLesson.lines" :min="1" :max="20"/>
       </div>
+      <!--
       <div>
         <span>Page:</span>
         <input type="number" v-model="record.NewLesson.page" required />
       </div>
-
+      -->
       <div>
-        <span>Assigned:</span>
-        <input type="checkbox" v-model="record.NewLesson.assigned" />
-      </div>
-      <div>
-        <span>Recited:</span>
-        <input type="checkbox" v-model="record.NewLesson.completed" />
+      <span>Track:</span>
+      <select v-model="record.NewLesson.track">
+        <option v-for="(track,index) in Object.keys(tracks)" :key="index" :value="track">{{tracks[track]}}</option>
+      </select>
       </div>
       <br />
       <h1>Attached Lesson</h1>
       <br/>
-
+      <div>
       <span>Portion:</span>
       <select v-model="record.CurrentLesson.portion">
-        <option value="current">Current</option>
-        <option value="h1">1st Half</option>
-        <option value="h2">2nd Half</option>
-        <option value="q1">1st Quarter</option>
-        <option value="q2">2nd Quarter</option>
-        <option value="q3">3rd Quarter</option>
-        <option value="q4">4th Quarter</option>
+          <option v-for="(portion,index) in Object.keys(portions_attached)" :key="index" :value="portion">{{portions_attached[portion]}}</option>
       </select>
-      <div>
-        <span>Assigned:</span>
-        <input type="checkbox" v-model="record.CurrentLesson.assigned" />
-      </div>
-      <div>
-        <span>Recited:</span>
-        <input type="checkbox" v-model="record.CurrentLesson.completed" />
       </div>
       <br />
+      <span>Track:</span>
+      <select v-model="record.CurrentLesson.track">
+        <option v-for="(track,index) in Object.keys(tracks)" :key="index" :value="track">{{tracks[track]}}</option>
+      </select>
 
-      <h1>General Revision</h1>
+      <h1>Revision</h1>
       <br/>
 
       <div>
@@ -77,29 +67,27 @@
       <div>
         <span>Portion:</span>
         <select v-model="record.Revision.portion">
-          <option value="full">Full</option>
-          <option value="h1">1st Half</option>
-          <option value="h2">2nd Half</option>
-          <option value="q1">1st Quarter</option>
-          <option value="q2">2nd Quarter</option>
-          <option value="q3">3rd Quarter</option>
-          <option value="q4">4th Quarter</option>
+          <option v-for="(portion,index) in Object.keys(portions_revision)" :key="index" :value="portion">{{portions_revision[portion]}}</option>
         </select>
       </div>  
+      <div>
+        <label>Extra Juz: </label>
+        <input type="string" v-model="record.Revision.extrajuz" />
+      </div>
 
       <div>
         <span>Mistakes:</span>
-        <input type="number" v-model="record.Revision.mistakes" />
-      </div>
-      <div>
-        <span>Assigned:</span>
-        <input type="checkbox" v-model="record.Revision.assigned" />
-      </div>
-      <div>
-        <span>Recited:</span>
-        <input type="checkbox" v-model="record.Revision.completed" />
-      </div>
+      <select v-model="record.Revision.mistakes">
+       <option v-for="(mistake,index) in Object.keys(mistakes)" :key="index" :value="mistake">{{mistakes[mistake]}}</option>
+      </select>   
 
+      </div>
+      <div>
+      <span>Track:</span>
+      <select v-model="record.Revision.track">
+        <option v-for="(track,index) in Object.keys(tracks)" :key="index" :value="track">{{tracks[track]}}</option>
+      </select>
+      </div>
 
       <br />
 
@@ -120,6 +108,7 @@ import {
 } from "../main";
 
 import common from "../tracker_common"
+//import m_mistakes from "../tracker_common";
 
 
 
@@ -127,18 +116,17 @@ export default {
   name: "RecordDetail",
   data() {
     var d = new Date();
-    var datestring =
-      d.getMonth() + 1 + "-" + d.getDate() + "-" + d.getFullYear();
+    var datestring = d.toISOString().split("T")[0];
     console.log("data():" + datestring);
     if (this.record == undefined)
       return {
         record: {
           errors: [],
-          date: datestring,
+          SK: datestring,
           program: "hifz",
           NewLesson: DefaultNewLesson(),
           CurrentLesson: DefaultCurrentLesson(),
-          Revision: DefaultRevision(),
+          Revision: DefaultRevision()
         },
       };
     else {
@@ -148,11 +136,16 @@ export default {
   },
   created() {
     var rid = this.$route.params.record_id;
+    var student_id = this.$store.state.student.id;
     var skey = this.$route.params.skey;
+    this.mistakes = common.m_mistakes;
+    this.tracks = common.m_tracks;
+    this.portions_attached = common.m_portions_attached;
+    this.portions_revision = common.m_portions_revision;
 
     console.log(rid);
     if(rid != 'new') { // New Records will not have a rid
-      const api_url = `${common.api_base}record/${skey}/${rid}`;
+      const api_url = `${common.api_base}record/${skey}/${student_id}/${rid}`;
 
       axios.get(api_url).then((x) => {
         console.log("created():" + x.data);
@@ -169,26 +162,25 @@ export default {
           this.record.Revision = DefaultRevision();
         }
       });
-    }
+    } 
   },
   methods: {
     submitRecordDetail() {
       var sid = this.$store.state.student.id;
       var skey = this.$store.state.school.key;
-      var date = this.record.date;
+      var date = this.record.SK;
       this.record.errors = [];
       if (this.record.NewLesson.juz > 30 || this.record.Revision.juz > 30) {
         this.record.errors.push("1 < Juz < 30");
       } else {
         delete this.record.errors;
-        const api_url = `${common.api_base}record/${skey}/${sid}::${date}`;
+        const api_url = `${common.api_base}record/${skey}/${sid}/${date}`;
 
         console.log(api_url);
         console.log(this.record);
         axios.post(api_url, this.record).then((x) => {
           console.log(x);
         });
-        //this.$router.push("/student/records/"+skey+"/"+this.$store.state.student.id);
         this.$router.push(`/student/records/${skey}/${this.$store.state.student.id}`);
       }
     },

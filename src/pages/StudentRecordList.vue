@@ -3,15 +3,14 @@
     <table>
       <tr>
         <th></th>
-        <th colspan="3">New Lesson</th>
+        <th colspan="2">New Lesson</th>
         <th colspan="1">Attached Lesson</th>
-        <th colspan="3">General Revision</th>
+        <th colspan="4">General Revision</th>
       </tr>
       <tr>
         <th>Date</th>
         <th>Juz</th>
-        <th>Mistakes</th>
-        <th>Page</th>
+        <th>Lines</th>
         <th>Portion</th>
         <th>Juz</th>
         <th>Portion</th>
@@ -22,23 +21,17 @@
 
       </tr>
 
-      <tr v-for="record in records" :key="record.id">
-        <!--div>
-          {{m_portions[record.CurrentLesson.portion]}}
-        </div-->  
+      <tr v-for="record in records" :key="record.SK">
         <td>
-          <router-link :to="{ name: 'record_detail', params: {skey:$store.state.school.key, record_id: record.id } }">
-            {{ record.date }}
+          <router-link :to="{ name: 'record_detail', params: {skey:$store.state.school.key, record_id: record.SK } }">
+            {{ record.SK }}
           </router-link>
         </td>
         <td>
           {{ record.NewLesson.juz }}
         </td>
         <td>
-          {{ record.NewLesson.mistakes }}
-        </td>
-        <td>
-          {{ record.NewLesson.page }}
+          {{ record.NewLesson.lines }}
         </td>
         <td>
           {{ m_portions[record.CurrentLesson.portion] }}
@@ -70,6 +63,7 @@ import {
 } from "../main";
 
 import common from "../tracker_common";
+import m_mistakes from "../tracker_common";
 
 export default {
   name: "Records",
@@ -96,8 +90,8 @@ export default {
     console.log(this.m_portions);
     axios.get(api_url).then((x) => {
       console.log(x);
-      this.records = x.data.filter(record => record.docType == 'dtracker::'+skey);
-      var students = x.data.filter(record => record.docType == 'student::'+skey);
+      this.records = x.data.filter(record => record.PK.includes('dtracker::'+skey));
+      var students = x.data.filter(record => record.PK == 'student::'+skey);
       var sname = '';
       if(students.length > 0) {
         sname = students[0].name;
