@@ -15,6 +15,7 @@
         <th>Juz</th>
         <th>Portion</th>
         <th>Mistakes</th>
+        <th v-if="$store.state.login.role == 'teacher'">Action</th>
       </tr>
 
       <tr>
@@ -44,6 +45,9 @@
         </td>
         <td>
           {{ record.Revision.mistakes }}
+        </td>
+        <td v-if="$store.state.login.role == 'teacher'">
+      <button @click="removeRecord(record.SK)">Delete</button>
         </td>
       </tr>
     </table>
@@ -76,34 +80,47 @@ export default {
     };
   },
   created() {
-    var sid = this.$route.params.student_id;
-    var skey = this.$route.params.skey;
-    const api_url = `${common.api_base}records/${skey}/${sid}`;
-    console.log(api_url);
-    console.log(this.m_portions);
-    axios.get(api_url).then((x) => {
-      console.log(x);
-      this.records = x.data.filter(record => record.PK.includes('dtracker::'+skey));
-      var students = x.data.filter(record => record.PK == 'student::'+skey);
-      var sname = '';
-      if(students.length > 0) {
-        sname = students[0].name;
-        this.$store.commit("setStudentObject", { name: sname, id: sid });
-        if(this.$store.state.login.role == '')
-          this.$store.state.login.role = 'student';
-      }
-
-      this.records.forEach(record => {
-        if (record.CurrentLesson == undefined) {
-          record.CurrentLesson = DefaultCurrentLesson();
-        }
-        if (record.Revision == undefined) {
-          record.Revision = DefaultRevision();
-        }
-      });
-    });
+    this.refreshList()
   },
   methods: {
+    refreshList() {
+      var sid = this.$route.params.student_id;
+      var skey = this.$route.params.skey;
+      const api_url = `${common.api_base}records/${skey}/${sid}`;
+      console.log(api_url);
+      console.log(this.m_portions);
+      axios.get(api_url).then((x) => {
+        console.log(x);
+        this.records = x.data.filter(record => record.PK.includes('dtracker::'+skey));
+        var students = x.data.filter(record => record.PK == 'student::'+skey);
+        var sname = '';
+        if(students.length > 0) {
+          sname = students[0].name;
+          this.$store.commit("setStudentObject", { name: sname, id: sid });
+          if(this.$store.state.login.role == '')
+            this.$store.state.login.role = 'student';
+        }
+
+        this.records.forEach(record => {
+          if (record.CurrentLesson == undefined) {
+            record.CurrentLesson = DefaultCurrentLesson();
+          }
+          if (record.Revision == undefined) {
+            record.Revision = DefaultRevision();
+          }
+        });
+      });
+    },
+    removeRecord(tracker_date) {
+      var sid = this.$store.state.student.id;
+      var skey = this.$store.state.school.key;
+      const api_url = `${common.api_base}record/${skey}/${sid}/${tracker_date}`;
+      console.log(api_url);
+      axios.delete(api_url, this.record).then((x) => {
+        console.log(x);
+      });
+      this.refreshList();
+    },
     newRecordDetail() {
       this.$router.push({ name: "record_detail",params : {record_id:"new"} });
     },

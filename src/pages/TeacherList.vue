@@ -11,7 +11,6 @@
     <tr v-for="teacher in teachers" :key="teacher.id">
       <td>
         <router-link :to="{ name: 'students', params: { tid: teacher.SK } }">
-        <!--router-link :to="{ name: 'students', params: { tid: teacher.id,tname : teacher.name } }"-->
           {{ teacher.name }}
         </router-link>
       </td>
@@ -80,13 +79,23 @@ export default {
   }
   */
   methods: {
+    refreshList(schoolkey) {
+        const api_url = `${common.api_base}school/${schoolkey}/teachers`;
+        console.log("refreshing teacher list");
+        axios.get(api_url).then((x) => {
+          console.log(x);
+          this.teachers = x.data.filter((teacher) => teacher.PK != "school"); 
+          this.newTeacher = "";
+          this.teacherID = "";
+        });
+    },
     deleteTeacher(teacherSK) {
       var schoolkey = this.$route.params.skey;
-      const api_url = `${common.api_base}school/${schoolkey}/teacher/teacherSK`;
+      const api_url = `${common.api_base}school/${schoolkey}/teacher/${teacherSK}`;
       console.log(api_url);
-      console.log(this);
       axios.delete(api_url).then((x) => {
         console.log(x);
+        this.refreshList(schoolkey);
       });
     },
   
@@ -106,15 +115,18 @@ export default {
       console.log(this);
       axios.post(api_url, teacherItem).then((x) => {
         console.log(x);
+        this.refreshList(schoolkey);
+
         // refresh list
+        /*
         const api_url = `${common.api_base}school/${schoolkey}/teachers`;
         axios.get(api_url).then((x) => {
           console.log(x);
-          this.teachers = x.data.filter((student) => student.PK != "school"); 
+          this.teachers = x.data.filter((teacher) => teacher.PK != "school"); 
           this.newTeacher = "";
           this.teacherID = "";
         });
-
+        */
       });
     },
   },

@@ -15,8 +15,7 @@ export default new Router(
   {
     routes: [
       {
-        path: '/login',
-        query:{role:''},
+        path: '/login/:role?',
         component: Login
       },
       {

@@ -3,7 +3,7 @@
     <tr>
       <th>Student</th>
       <th v-if="$store.state.login.role == 'admin'">Teacher ID</th>
-      <th v-if="$store.state.login.role == 'admin'">Action</th>
+      <th colspan="2" v-if="$store.state.login.role == 'admin'">Action</th>
     </tr>
     <tr v-for="s in students" :key="s.SK">
       <td>
@@ -21,6 +21,9 @@
       </td>
       <td v-if="$store.state.login.role == 'admin'">
         <button @click="assignTeacherToStudent(s.SK, s.LSK)">Assign</button>
+      </td>
+      <td v-if="$store.state.login.role == 'admin'">
+        <button @click="deleteStudent(s.SK)">Delete</button>
       </td>
     </tr>
     <tr v-if="$store.state.login.role == 'admin'">
@@ -80,6 +83,24 @@ export default {
     });
   },
   methods: {
+    refreshList(schoolkey) {
+        // refresh the student list
+        console.log("refresh the student list");
+        var api_url = `${common.api_base}students/${schoolkey}/teacher/${this.$store.state.teacher.id}`;
+        axios.get(api_url).then((x) => {
+          console.log(x);
+          this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
+        });
+    },
+    deleteStudent(sid) {
+      var schoolkey = this.$store.state.school.key;
+      const api_url = `${common.api_base}school/${schoolkey}/student/${sid}`;
+      console.log(api_url);
+      axios.delete(api_url).then((x) => {
+        console.log(x);
+        this.refreshList(schoolkey);
+      });
+    },
     addNewStudent() {
       var schoolkey = this.$store.state.school.key;
       const api_url = `${common.api_base}school/${schoolkey}/student/`;
@@ -95,13 +116,7 @@ export default {
       };
       axios.post(api_url, studentItem).then((x) => {
         console.log(x);
-        // refresh the student list
-        var api_url = `${common.api_base}students/${schoolkey}/teacher/${this.$store.state.teacher.id}`;
-        axios.get(api_url).then((x) => {
-          console.log(x);
-          this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
-          this.newStudent = "";
-        });
+        this.refreshList(schoolkey);
       });
     },
     assignTeacherToStudent(sid, teacher_id) {
@@ -124,12 +139,7 @@ export default {
       console.log(studentItem);
       axios.put(api_url, studentItem).then((x) => {
         console.log(x);
-        // refresh the student list
-        var api_url = `${common.api_base}students/${schoolkey}/teacher/${this.$store.state.teacher.id}`;
-        axios.get(api_url).then((x) => {
-          console.log(x);
-          this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
-        });
+        this.refreshList(schoolkey);
       });
     },
   },
