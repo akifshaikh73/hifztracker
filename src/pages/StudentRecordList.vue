@@ -34,13 +34,13 @@
           {{ record.NewLesson.lines }}
         </td>
         <td>
-          {{ m_portions[record.CurrentLesson.portion] }}
+          {{ lists.portions_attached[record.CurrentLesson.portion] }}
         </td>
         <td>
           {{ record.Revision.juz }}
         </td>
         <td>
-          {{ m_portions[record.Revision.portion] }}
+          {{lists.portions_revision[record.Revision.portion] }}
         </td>
         <td>
           {{ record.Revision.mistakes }}
@@ -63,23 +63,16 @@ import {
 } from "../main";
 
 import common from "../tracker_common";
-import m_mistakes from "../tracker_common";
 
 export default {
   name: "Records",
   data() {
     return {
       records: [],
-      m_portions:{
-      "h1":"1st Half",
-      "h2":"2nd Half",
-      "q1":"1st Quarter",
-      "q2":"2nd Quarter",
-      "q3":"3rd Quarter",
-      "q4":"4th Quarter",
-      "full" : "Full Juz",
-      "current": "Current Juz"
-      }
+      lists : {
+        portions_attached : common.m_portions_attached,
+        portions_revision : common.m_portions_revision,
+      },
     };
   },
   created() {

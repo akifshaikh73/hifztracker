@@ -18,19 +18,18 @@
       <td>
         {{teacher.id}}
       </td>
-    </tr>
-    <tr>
-      <td>
-        Name:
-        <input  type="text"   v-model="newTeacher"/>
-        Login ID:
-        <input  type="text"   v-model="teacherID"/>
-      </td>  
       <td>
         <button @click="deleteTeacher(teacher.SK)">Delete</button>
       </td>
+
     </tr>
-    <tr>  
+    <tr>
+      <td>
+        <input  type="text"   v-model="newTeacher"/>
+      </td>  
+      <td>
+        <input  type="text"   v-model="teacherID"/>
+      </td>  
       <td>
         <button @click="addNewTeacher">Add</button>
       </td>
@@ -51,8 +50,7 @@ export default {
     return {
       teachers: [],
       newTeacher : "New Teacher",
-      teacherID : "id"
-
+      teacherID : "loginid"
     };
   },
   created() {
@@ -61,7 +59,7 @@ export default {
     var schoolkey = this.$route.params.skey;
     this.$store.commit('resetTeacherObject');
     this.$store.commit('resetStudentObject');
-    const api_url = common.api_base + "school/" + schoolkey + "/teachers";
+    const api_url = `${common.api_base}school/${schoolkey}/teachers`;
     axios.get(api_url).then((x) => {
       console.log(x);
       var schoolName = x.data.filter((student) => student.PK == "school")[0].name;
@@ -69,7 +67,7 @@ export default {
       this.$store.commit('setSchoolObject',{key: schoolkey,name: schoolName});
       this.teachers = x.data.filter((student) => student.PK != "school"); 
       this.newTeacher = "";
-      console.log("with new Teacher:"+this);
+      this.teacherID = "";
     });
   },
   /*
@@ -108,6 +106,15 @@ export default {
       console.log(this);
       axios.post(api_url, teacherItem).then((x) => {
         console.log(x);
+        // refresh list
+        const api_url = `${common.api_base}school/${schoolkey}/teachers`;
+        axios.get(api_url).then((x) => {
+          console.log(x);
+          this.teachers = x.data.filter((student) => student.PK != "school"); 
+          this.newTeacher = "";
+          this.teacherID = "";
+        });
+
       });
     },
   },

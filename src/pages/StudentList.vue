@@ -25,7 +25,6 @@
     </tr>
     <tr v-if="$store.state.login.role == 'admin'">
       <td>
-        Name:
         <input type="text" v-model="newStudent" />
       </td>
       <td/>
@@ -53,13 +52,12 @@ export default {
   created() {
     if(this.$store.state.login.role == '')
       this.$router.push("/login");
-    var api_url = "";
     var tid = this.$route.params.tid;
     console.log("teachers id:" + tid);
     var schoolkey = this.$store.state.school.key;
 
     // Get students for a teacher
-    api_url = `${common.api_base}students/${schoolkey}/teacher/${tid}`;
+    var api_url = `${common.api_base}students/${schoolkey}/teacher/${tid}`;
     this.$store.commit("setTeacherObject", { id: tid });
      /*else { //TODO
       // get students of a school
@@ -97,7 +95,13 @@ export default {
       };
       axios.post(api_url, studentItem).then((x) => {
         console.log(x);
-        this.$router.push({ name: "students" });
+        // refresh the student list
+        var api_url = `${common.api_base}students/${schoolkey}/teacher/${this.$store.state.teacher.id}`;
+        axios.get(api_url).then((x) => {
+          console.log(x);
+          this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
+          this.newStudent = "";
+        });
       });
     },
     assignTeacherToStudent(sid, teacher_id) {
@@ -120,7 +124,12 @@ export default {
       console.log(studentItem);
       axios.put(api_url, studentItem).then((x) => {
         console.log(x);
-        this.$router.push({ name: "students" });
+        // refresh the student list
+        var api_url = `${common.api_base}students/${schoolkey}/teacher/${this.$store.state.teacher.id}`;
+        axios.get(api_url).then((x) => {
+          console.log(x);
+          this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
+        });
       });
     },
   },

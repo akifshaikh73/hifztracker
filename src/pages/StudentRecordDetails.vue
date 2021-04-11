@@ -39,7 +39,7 @@
       <div>
       <span>Track:</span>
       <select v-model="record.NewLesson.track">
-        <option v-for="(track,index) in Object.keys(tracks)" :key="index" :value="track">{{tracks[track]}}</option>
+        <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
       </div>
       <br />
@@ -48,13 +48,13 @@
       <div>
       <span>Portion:</span>
       <select v-model="record.CurrentLesson.portion">
-          <option v-for="(portion,index) in Object.keys(portions_attached)" :key="index" :value="portion">{{portions_attached[portion]}}</option>
+          <option v-for="(portion,index) in Object.keys(lists.portions_attached)" :key="index" :value="portion">{{lists.portions_attached[portion]}}</option>
       </select>
       </div>
       <br />
       <span>Track:</span>
       <select v-model="record.CurrentLesson.track">
-        <option v-for="(track,index) in Object.keys(tracks)" :key="index" :value="track">{{tracks[track]}}</option>
+        <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
 
       <h1>Revision</h1>
@@ -67,7 +67,7 @@
       <div>
         <span>Portion:</span>
         <select v-model="record.Revision.portion">
-          <option v-for="(portion,index) in Object.keys(portions_revision)" :key="index" :value="portion">{{portions_revision[portion]}}</option>
+          <option v-for="(portion,index) in Object.keys(lists.portions_revision)" :key="index" :value="portion">{{lists.portions_revision[portion]}}</option>
         </select>
       </div>  
       <div>
@@ -78,14 +78,14 @@
       <div>
         <span>Mistakes:</span>
       <select v-model="record.Revision.mistakes">
-       <option v-for="(mistake,index) in Object.keys(mistakes)" :key="index" :value="mistake">{{mistakes[mistake]}}</option>
+       <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
       </select>   
 
       </div>
       <div>
       <span>Track:</span>
       <select v-model="record.Revision.track">
-        <option v-for="(track,index) in Object.keys(tracks)" :key="index" :value="track">{{tracks[track]}}</option>
+        <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
       </div>
 
@@ -108,8 +108,6 @@ import {
 } from "../main";
 
 import common from "../tracker_common"
-//import m_mistakes from "../tracker_common";
-
 
 
 export default {
@@ -120,6 +118,12 @@ export default {
     console.log("data():" + datestring);
     if (this.record == undefined)
       return {
+        lists : {
+          mistakes : common.m_mistakes,
+          tracks : common.m_tracks,
+          portions_attached : common.m_portions_attached,
+          portions_revision : common.m_portions_revision,
+        },
         record: {
           errors: [],
           SK: datestring,
@@ -138,10 +142,6 @@ export default {
     var rid = this.$route.params.record_id;
     var student_id = this.$store.state.student.id;
     var skey = this.$route.params.skey;
-    this.mistakes = common.m_mistakes;
-    this.tracks = common.m_tracks;
-    this.portions_attached = common.m_portions_attached;
-    this.portions_revision = common.m_portions_revision;
 
     console.log(rid);
     if(rid != 'new') { // New Records will not have a rid
