@@ -3,6 +3,7 @@
     <tr>
       <th>Teacher</th>
       <th>Login ID</th>
+      <th>Program</th>
       <th>Action</th>
     </tr>
 
@@ -15,8 +16,11 @@
         </router-link>
       </td>
       <td>
-        {{teacher.id}}
+        {{teacher.SK}}
       </td>
+      <td>
+        {{programs[teacher.program]}}
+      </td>  
       <td>
         <button @click="deleteTeacher(teacher.SK)">Delete</button>
       </td>
@@ -28,6 +32,9 @@
       </td>  
       <td>
         <input  type="text"   v-model="teacherID"/>
+      </td>  
+      <td>
+        <input  type="text"   v-model="program"/>
       </td>  
       <td>
         <button @click="addNewTeacher">Add</button>
@@ -47,9 +54,11 @@ export default {
   name: "Teachers",
   data() {
     return {
+      programs : common.m_programs,
       teachers: [],
       newTeacher : "New Teacher",
-      teacherID : "loginid"
+      teacherID : "loginid",
+      program :"hifz"
     };
   },
   created() {
@@ -104,9 +113,9 @@ export default {
       var teacherItem = {
         PK: "teacher::"+schoolkey,
         name: this.newTeacher,
-        LSK: this.teacherID,
-        id: this.teacherID,
-        program: "hifz",
+        LSK: this.program,
+        SK: this.teacherID,
+        program: this.program,
         school: this.$store.state.school.name
       };
 

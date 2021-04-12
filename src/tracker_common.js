@@ -1,5 +1,11 @@
 const api_base = "http://localhost:8081/";
 
+const m_programs = {
+    "hifz":"Hifz",
+    "phifz":"Part time Hifz",
+    "maktab":"Maktab"
+}
+
 const m_portions_revision = {
     "full" : "Full Juz",
     "h1":"1st Half",
@@ -37,4 +43,4 @@ const m_tracks = {
     "X":"Absent,Early Out,Tardt"
 }
 
-module.exports = { api_base, m_portions_attached,m_portions_revision,m_mistakes,m_tracks}
+module.exports = { api_base, m_portions_attached,m_portions_revision,m_mistakes,m_tracks,m_programs}

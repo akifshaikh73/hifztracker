@@ -30,7 +30,9 @@
       <td>
         <input type="text" v-model="newStudent" />
       </td>
-      <td/>
+      <td>
+        <input type="text" v-model="loginid" />
+      </td>  
       <td>
         <button @click="addNewStudent">Add</button>
       </td>
@@ -50,6 +52,7 @@ export default {
     return {
       students: [],
       newStudent: "Name",
+      loginid: "LoginId",
     };
   },
   created() {
@@ -74,9 +77,9 @@ export default {
       var teachers = x.data.filter((student) => student.PK == "teacher::"+schoolkey);
       if (teachers.length > 0)
         this.$store.commit("setTeacherObject", {
-          id: teachers[0].SK,
           name: teachers[0].name,
-          loginid:teachers[0].id
+          loginid:teachers[0].SK,
+          program: teachers[0].program
         });
 
       this.newStudent = "";
@@ -86,11 +89,13 @@ export default {
     refreshList(schoolkey) {
         // refresh the student list
         console.log("refresh the student list");
-        var api_url = `${common.api_base}students/${schoolkey}/teacher/${this.$store.state.teacher.id}`;
+        var api_url = `${common.api_base}students/${schoolkey}/teacher/${this.$store.state.teacher.loginid}`;
         axios.get(api_url).then((x) => {
           console.log(x);
           this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
         });
+        this.newStudent = "";
+        this.loginid = "";
     },
     deleteStudent(sid) {
       var schoolkey = this.$store.state.school.key;
@@ -109,7 +114,8 @@ export default {
       var studentItem = {
         PK: `student::${schoolkey}`,
         name: this.newStudent,
-        program: "hifz",
+        SK : this.loginid,
+        program: this.$store.state.teacher.program,
         school: this.$store.state.school.name,
         teacher: this.$store.state.teacher.name,
         LSK: this.$store.state.teacher.loginid,
