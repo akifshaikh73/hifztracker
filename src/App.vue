@@ -29,8 +29,7 @@
           :to="{
             name: 'students',
             params: {
-              tid: this.$store.state.teacher.id,
-              tname: this.$store.state.teacher.name,
+              tid: this.$store.state.teacher.loginid
             },
           }"
         >
@@ -42,8 +41,7 @@
           :to="{
             name: 'record_list',
             params: {
-              student_id: this.$store.state.student.id,
-              student_name: this.$store.state.student.name,
+              student_id: this.$store.state.student.id
             },
           }"
         >

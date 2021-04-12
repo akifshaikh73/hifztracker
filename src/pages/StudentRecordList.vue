@@ -18,9 +18,6 @@
         <th v-if="$store.state.login.role == 'teacher'">Action</th>
       </tr>
 
-      <tr>
-
-      </tr>
 
       <tr v-for="record in records" :key="record.SK">
         <td>
@@ -28,24 +25,33 @@
             {{ record.SK }}
           </router-link>
         </td>
-        <td>
+        <td v-if="record.NewLesson.track == 'X'" colspan="2" class="absent">
+          Absent
+        </td>  
+        <td v-if="record.NewLesson.track != 'X'">
           {{ record.NewLesson.juz }}
         </td>
-        <td>
+        <td v-if="record.NewLesson.track != 'X'">
           {{ record.NewLesson.lines }}
         </td>
-        <td>
+        <td v-if="record.CurrentLesson.track == 'X'" colspan="1" class="absent">
+          Absent
+        </td>  
+        <td v-if="record.CurrentLesson.track != 'X'">
           {{ lists.portions_attached[record.CurrentLesson.portion] }}
         </td>
-        <td>
-          {{ record.Revision.juz }}
-        </td>
-        <td>
-          {{lists.portions_revision[record.Revision.portion] }}
-        </td>
-        <td>
-          {{ record.Revision.mistakes }}
-        </td>
+        <td v-if="record.Revision.track == 'X'" colspan="3" class="absent">
+          Absent
+        </td>  
+          <td v-if="record.Revision.track != 'X'">
+            {{ record.Revision.juz }}
+          </td>
+          <td v-if="record.Revision.track != 'X'">
+            {{lists.portions_revision[record.Revision.portion] }}
+          </td>
+          <td v-if="record.Revision.track != 'X'">
+            {{ record.Revision.mistakes }}
+          </td>
         <td v-if="$store.state.login.role == 'teacher'">
       <button @click="removeRecord(record.SK)">Delete</button>
         </td>
@@ -85,7 +91,8 @@ export default {
   methods: {
     refreshList() {
       var sid = this.$route.params.student_id;
-      var skey = this.$route.params.skey;
+      var skey = this.$store.state.school.key;
+
       const api_url = `${common.api_base}records/${skey}/${sid}`;
       console.log(api_url);
       console.log(this.m_portions);
@@ -127,3 +134,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.absent {
+  background-color: rgba(0, 255, 0, 0.336);
+}
+</style>

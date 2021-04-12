@@ -19,6 +19,11 @@
         <input type="text" v-model="record.comment" required />
       </div>
 
+      <div>
+        <span>Absent: </span>
+        <input type="checkbox" v-model="record.absent" required  @input="markAbsent()"/>
+      </div>
+
       <h1>New Lesson</h1>
       <br/>
 
@@ -153,7 +158,7 @@ export default {
         this.record.errors = [];
 
         if (this.record.NewLesson == undefined) {
-          this.record.CurrentLesson = DefaultCurrentLesson();
+          this.record.NewLesson = DefaultNewLesson();
         }
         if (this.record.CurrentLesson == undefined) {
           this.record.CurrentLesson = DefaultCurrentLesson();
@@ -165,6 +170,14 @@ export default {
     } 
   },
   methods: {
+    markAbsent() {
+      this.record.NewLesson = DefaultNewLesson();
+      this.record.CurrentLesson = DefaultCurrentLesson();
+      this.record.Revision = DefaultRevision();
+      this.record.NewLesson.track = 'X';
+      this.record.CurrentLesson.track = 'X';
+      this.record.Revision.track = 'X';
+    },
     submitRecordDetail() {
       var sid = this.$store.state.student.id;
       var skey = this.$store.state.school.key;
@@ -181,7 +194,7 @@ export default {
         axios.post(api_url, this.record).then((x) => {
           console.log(x);
         });
-        this.$router.push(`/student/records/${skey}/${this.$store.state.student.id}`);
+        this.$router.push(`/student/records/${this.$store.state.student.id}`);
       }
     },
   },
