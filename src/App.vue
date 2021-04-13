@@ -133,6 +133,11 @@ tr td:hover {
   background: #666;
   color: #fff;
 }
+
+.error {
+  background-color: rgba(255, 51, 0, 0.336);
+}
+
 /* Hover cell effect! */
 </style>
 

@@ -1,6 +1,10 @@
 <template>
 
   <table align="center">
+    <tr v-if="error != ''">
+      <td colspan = "4" class="error">{{error}}</td>
+    </tr>    
+
     <tr>
       <th>Student</th>
       <th v-if="$store.state.login.role == 'admin'">Teacher ID</th>
@@ -51,6 +55,7 @@ export default {
   name: "StudentList",
   data() {
     return {
+      error :'',
       students: [],
       newStudent: "Name",
       loginid: "LoginId",
@@ -87,6 +92,7 @@ export default {
   },
   methods: {
     refreshList(schoolkey) {
+        this.error = '';
         // refresh the student list
         console.log("refresh the student list");
         var api_url = `${common.api_base}students/${schoolkey}/teacher/${this.$store.state.teacher.loginid}`;
@@ -104,6 +110,9 @@ export default {
       axios.delete(api_url).then((x) => {
         console.log(x);
         this.refreshList(schoolkey);
+      }).catch(error=> {
+        this.error = error.response.data;
+        console.log(error.response.data);
       });
     },
     addNewStudent() {
@@ -151,3 +160,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.error {
+  background-color: rgba(255, 51, 0, 0.336);
+}
+</style>
