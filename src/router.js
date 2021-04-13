@@ -38,7 +38,7 @@ export default new Router(
         component: StudentList
       },
       {
-        path: '/student/records/:student_id/',
+        path: '/student/records/:student_id/:page?',
         name: 'record_list',
         component: StudentRecordList
       },

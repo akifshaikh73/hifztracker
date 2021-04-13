@@ -1,5 +1,9 @@
 <template>
   <table align="center" v-if="$store.state.login.role == 'super_admin' || $store.state.login.role == 'admin'">
+    <tr v-if="error != ''">
+      <td colspan = "4" class="error">{{error}}</td>
+    </tr>    
+
     <tr>
       <th>Teacher</th>
       <th>Login ID</th>
@@ -54,6 +58,7 @@ export default {
   name: "Teachers",
   data() {
     return {
+      error :'',
       programs : common.m_programs,
       teachers: [],
       newTeacher : "New Teacher",
@@ -89,6 +94,7 @@ export default {
   */
   methods: {
     refreshList(schoolkey) {
+        this.error = '';
         const api_url = `${common.api_base}school/${schoolkey}/teachers`;
         console.log("refreshing teacher list");
         axios.get(api_url).then((x) => {
@@ -105,6 +111,9 @@ export default {
       axios.delete(api_url).then((x) => {
         console.log(x);
         this.refreshList(schoolkey);
+      }).catch(error=> {
+        this.error = error.response.data;
+        console.log(error.response.data);
       });
     },
   
@@ -126,19 +135,14 @@ export default {
         console.log(x);
         this.refreshList(schoolkey);
 
-        // refresh list
-        /*
-        const api_url = `${common.api_base}school/${schoolkey}/teachers`;
-        axios.get(api_url).then((x) => {
-          console.log(x);
-          this.teachers = x.data.filter((teacher) => teacher.PK != "school"); 
-          this.newTeacher = "";
-          this.teacherID = "";
-        });
-        */
       });
     },
   },
 
 };
 </script>
+<style scoped>
+.error {
+  background-color: rgba(255, 51, 0, 0.336);
+}
+</style>

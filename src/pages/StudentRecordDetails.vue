@@ -1,10 +1,10 @@
 <template>
   <div>
     <br />
-      <p v-if="record.errors">
-          <b v-if="record.errors.length">Please fix the error(s):</b>
-          <ul>
-            <li v-for="error in record.errors" :key="error.id">{{ error }}</li>
+      <p v-if="errors">
+          <b v-if="errors.length">Please fix the error(s):</b>
+          <ul class="error">
+            <li v-for="error in errors" :key="error.id">{{ error }}</li>
           </ul>
       </p>
       <br/>
@@ -123,6 +123,7 @@ export default {
     console.log("data():" + datestring);
     if (this.record == undefined)
       return {
+        errors: [],
         lists : {
           mistakes : common.m_mistakes,
           tracks : common.m_tracks,
@@ -130,7 +131,6 @@ export default {
           portions_revision : common.m_portions_revision,
         },
         record: {
-          errors: [],
           SK: datestring,
           program: "hifz",
           NewLesson: DefaultNewLesson(),
@@ -155,7 +155,7 @@ export default {
       axios.get(api_url).then((x) => {
         console.log("created():" + x.data);
         this.record = x.data;
-        this.record.errors = [];
+        this.errors = [];
 
         if (this.record.NewLesson == undefined) {
           this.record.NewLesson = DefaultNewLesson();
@@ -166,6 +166,9 @@ export default {
         if (this.record.Revision == undefined) {
           this.record.Revision = DefaultRevision();
         }
+      }).catch((error)=>{
+        console.error(error.response);
+        this.errors.push(error.response.data);
       });
     } 
   },
@@ -182,11 +185,11 @@ export default {
       var sid = this.$store.state.student.id;
       var skey = this.$store.state.school.key;
       var date = this.record.SK;
-      this.record.errors = [];
+      this.errors = [];
       if (this.record.NewLesson.juz > 30 || this.record.Revision.juz > 30) {
-        this.record.errors.push("1 < Juz < 30");
+        this.errors.push("1 < Juz < 30");
       } else {
-        delete this.record.errors;
+        delete this.errors;
         const api_url = `${common.api_base}record/${skey}/${sid}/${date}`;
 
         console.log(api_url);
@@ -213,5 +216,8 @@ h1 {
   font-weight: normal;
   line-height: 19px;
   margin-bottom: 7px;
+};
+error {
+  color : rgb(128, 6, 6)
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+
   <table align="center">
     <tr>
       <th>Student</th>
@@ -64,7 +65,6 @@ export default {
 
     // Get students for a teacher
     var api_url = `${common.api_base}students/${schoolkey}/teacher/${tid}`;
-    this.$store.commit("setTeacherObject", { id: tid });
      /*else { //TODO
       // get students of a school
       api_url = `${common.api_base}students/school/${tid}`;
