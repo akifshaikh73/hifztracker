@@ -137,8 +137,10 @@ export default {
         this.records = x.data.filter((record) =>
           record.PK.includes("dtracker::" + skey)
         );
-        var lastRecordDate = this.records[0].SK;
-        this.$store.commit("setLastRecord", lastRecordDate);
+        if(this.records[0] != undefined) {
+          var lastRecordDate = this.records[0].SK;
+          this.$store.commit("setLastRecord", lastRecordDate);
+        }
         var students = x.data.filter(
           (record) => record.PK == "student::" + skey
         );
