@@ -24,7 +24,8 @@ export default new Vuex.Store({
             id: '',
             password: ''
         },
-        program:'hifz'
+        program:'hifz',
+        lastrecord:''
     },
     getters: {
         // ...
@@ -38,6 +39,10 @@ export default new Vuex.Store({
         }
       },
     mutations: {
+        setLastRecord(state,recordDate) {
+            state.lastrecord = recordDate;
+            console.log(state.lastrecord);
+        },
         setLogin(state, loginContext) {
             console.log("SetLogin:"+loginContext);
             state.login.role = loginContext.role;

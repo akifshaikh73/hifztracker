@@ -138,6 +138,13 @@ tr td:hover {
   background-color: rgba(255, 51, 0, 0.336);
 }
 
+.button--remove {
+  background: none;
+  color: red;
+  text-transform: uppercase;
+  font-size: 11px;
+  align-self: flex-end;
+}
 /* Hover cell effect! */
 </style>
 

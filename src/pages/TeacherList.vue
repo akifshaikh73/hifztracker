@@ -26,7 +26,7 @@
         {{programs[teacher.program]}}
       </td>  
       <td>
-        <button @click="deleteTeacher(teacher.SK)">Delete</button>
+        <button class="button-remove" @click="deleteTeacher(teacher.SK)">Delete</button>
       </td>
 
     </tr>

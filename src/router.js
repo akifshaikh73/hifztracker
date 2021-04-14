@@ -43,7 +43,7 @@ export default new Router(
         component: StudentRecordList
       },
       {
-        path: '/student/detail/:skey/:record_id',
+        path: '/student/detail/:skey/:student_id/:record_id',
         name: 'record_detail',
         component: StudentRecordDetails
       },

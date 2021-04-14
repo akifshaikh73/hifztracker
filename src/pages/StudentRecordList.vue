@@ -7,49 +7,66 @@
     </div>
     <table>
       <tr>
-        <th></th>
-        <th colspan="2">New Lesson</th>
-        <th colspan="1">Attached Lesson</th>
-        <th colspan="4">General Revision</th>
+        <th colspan="2"></th>
+        <th colspan="3">New Lesson</th>
+        <th colspan="2">Attached Lesson</th>
+        <th colspan="5">Revision</th>
       </tr>
       <tr>
-        <th>Date</th>
+        <th>Day</th>
+        <th width="150px">Date</th>
         <th>Juz</th>
         <th>Lines</th>
-        <th>Portion</th>
+        <th>Track</th>
+        <th width="120px">Portion</th>
+        <th>Track</th>
         <th>Juz</th>
-        <th>Portion</th>
+        <th width="120px">Portion</th>
         <th>Mistakes</th>
+        <th>Track</th>
         <th v-if="$store.state.login.role == 'teacher'">Action</th>
       </tr>
 
       <tr v-for="record in records" :key="record.SK">
         <td>
+            {{ m_days[new Date(record.SK).getDay()] }}
+        </td>  
+        <td>
           <router-link
             :to="{
-              name: 'record_detail',
-              params: { skey: $store.state.school.key, record_id: record.SK },
+                name: 'record_detail',
+                params: { skey: $store.state.school.key,
+                student_id:$store.state.student.id,
+                record_id: record.SK 
+              },
             }"
           >
             {{ record.SK }}
           </router-link>
         </td>
-        <td v-if="record.NewLesson.track == 'X'" colspan="2" class="absent">
+        <td v-if="record.NewLesson.track == 'X'" colspan="3" class="absent">
           Absent
         </td>
-        <td v-if="record.NewLesson.track != 'X'">
-          {{ record.NewLesson.juz }}
-        </td>
-        <td v-if="record.NewLesson.track != 'X'">
-          {{ record.NewLesson.lines }}
-        </td>
-        <td v-if="record.CurrentLesson.track == 'X'" colspan="1" class="absent">
+          <td v-if="record.NewLesson.track != 'X'">
+            {{ record.NewLesson.juz }}
+          </td>
+          <td v-if="record.NewLesson.track != 'X'">
+            {{ record.NewLesson.lines }}
+          </td>
+          <td v-if="record.NewLesson.track != 'X'" :class="m_styles[record.NewLesson.track]">
+            {{ record.NewLesson.track }}
+          </td>
+        <td v-if="record.CurrentLesson.track == 'X'" colspan="2" class="absent">
           Absent
         </td>
         <td v-if="record.CurrentLesson.track != 'X'">
           {{ lists.portions_attached[record.CurrentLesson.portion] }}
         </td>
-        <td v-if="record.Revision.track == 'X'" colspan="3" class="absent">
+        <td v-if="record.CurrentLesson.track != 'X'" :class="m_styles[record.CurrentLesson.track]">
+          {{ record.CurrentLesson.track }}
+        </td>
+
+        <td v-if="record.Revision.track == 'X'" colspan="4" class="absent">
           Absent
         </td>
         <td v-if="record.Revision.track != 'X'">
@@ -61,13 +78,17 @@
         <td v-if="record.Revision.track != 'X'">
           {{ record.Revision.mistakes }}
         </td>
+        <td v-if="record.Revision.track != 'X'" :class="m_styles[record.Revision.track]">
+          {{ record.Revision.track }}
+        </td>
+
         <td v-if="$store.state.login.role == 'teacher'">
           <button @click="removeRecord(record.SK)">Delete</button>
         </td>
       </tr>
     </table>
     <div v-if="$store.state.login.role == 'teacher'">
-      <button @click="newRecordDetail">Add New</button>
+      <button @click="newRecordDetail">Add Record</button>
     </div>
   </div>
 </template>
@@ -83,6 +104,8 @@ export default {
   name: "Records",
   data() {
     return {
+      m_styles : common.m_styles,
+      m_days: common.m_days,
       showAllRecords : false,
       records: [],
       lists: {
@@ -114,6 +137,8 @@ export default {
         this.records = x.data.filter((record) =>
           record.PK.includes("dtracker::" + skey)
         );
+        var lastRecordDate = this.records[0].SK;
+        this.$store.commit("setLastRecord", lastRecordDate);
         var students = x.data.filter(
           (record) => record.PK == "student::" + skey
         );
@@ -156,10 +181,41 @@ export default {
 </script>
 <style scoped>
 .absent {
-  background-color: rgba(0, 255, 0, 0.336);
+  background-color: rgba(0, 174, 255, 0.651);
 }
-.mistakes {
+.attempted {
+  background-color: rgba(255, 145, 0, 0.336);
+}
+
+.failed {
   background-color: rgba(255, 51, 0, 0.336);
 }
 
+.passed {
+  background-color: rgba(0, 255, 21, 0.699);
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
 </style>

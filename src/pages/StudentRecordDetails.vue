@@ -16,10 +16,10 @@
       </div>
       <div>
         <span>Comment: </span>
-        <input type="text" v-model="record.comment" required />
+        <input class="comment" type="text" v-model="record.comment" required />
       </div>
 
-      <div>
+      <div v-if="$store.state.login.role == 'teacher'">
         <span>Absent: </span>
         <input type="checkbox" v-model="record.absent" required  @input="markAbsent()"/>
       </div>
@@ -145,16 +145,24 @@ export default {
   },
   created() {
     var rid = this.$route.params.record_id;
-    var student_id = this.$store.state.student.id;
+    var student_id = this.$route.params.student_id;
+    console.log(this.$store.state);
     var skey = this.$route.params.skey;
 
-    console.log(rid);
+    console.log(`${skey}/${student_id}/${rid}`);
     if(rid != 'new') { // New Records will not have a rid
       const api_url = `${common.api_base}record/${skey}/${student_id}/${rid}`;
 
       axios.get(api_url).then((x) => {
-        console.log("created():" + x.data);
-        this.record = x.data;
+        console.log(x.data);
+        if(this.$store.state.student.name == "" || this.$store.state.student.name == undefined) {
+          var student = x.data[0];
+          this.$store.commit("setStudentObject", { name: student.name, id: student.SK });
+          if (this.$store.state.login.role == "")
+            this.$store.state.login.role = "student";
+        }
+
+        this.record = x.data[1]; // 1st element is student item , second is tracking record
         this.errors = [];
 
         if (this.record.NewLesson == undefined) {
@@ -170,7 +178,18 @@ export default {
         console.error(error.response);
         this.errors.push(error.response.data);
       });
-    } 
+    } else {
+      // New Record
+      console.log(this.$store.state.lastrecord);
+      if(this.$store.state.lastrecord != '') {
+        var lastRecordDate = new Date(this.$store.state.lastrecord);
+        lastRecordDate.setDate(lastRecordDate.getDate()+1);
+        var strLastDate = (new Date(lastRecordDate)).toISOString().split('T')[0];
+        console.log(strLastDate);
+        this.record.SK = strLastDate;
+      }
+
+    }
   },
   methods: {
     markAbsent() {
@@ -219,5 +238,9 @@ h1 {
 };
 error {
   color : rgb(128, 6, 6)
+}
+
+.comment {
+  width: 25%;
 }
 </style>
