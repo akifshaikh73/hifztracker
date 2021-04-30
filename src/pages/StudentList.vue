@@ -68,7 +68,7 @@ export default {
     var api_url = `${common.api_base}students/${schoolkey}/teacher/${tid}`;
      /*else { //TODO
       // get students of a school
-      api_url = `${common.api_base}students/school/${tid}`;
+      api_url = `${common.api_base}/school/${tid}/students`;
     }*/
     this.$store.commit("resetStudentObject");
 
@@ -92,11 +92,23 @@ export default {
     }
   },
   methods: {
+    guid(len) {
+        var buf = [],
+            chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+            charlen = chars.length,
+            length = len || 32;
+            
+        for (var i = 0; i < length; i++) {
+            buf[i] = chars.charAt(Math.floor(Math.random() * charlen));
+        }
+        
+        return buf.join('');
+    },
     refreshList(schoolkey) {
         this.error = '';
         // refresh the student list
         console.log("refresh the student list");
-        var api_url = `${common.api_base}students/${schoolkey}/teacher/${this.$store.state.teacher.loginid}`;
+        var api_url = `${common.api_base}school/${schoolkey}/teacher/${this.$store.state.teacher.loginid}/students`;
         axios.get(api_url).then((x) => {
           console.log(x);
           this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
@@ -129,6 +141,7 @@ export default {
         school: this.$store.state.school.name,
         teacher: this.$store.state.teacher.name,
         LSK: this.$store.state.teacher.loginid,
+        passkey: this.guid(5)
       };
       axios.post(api_url, studentItem).then((x) => {
         console.log(x);

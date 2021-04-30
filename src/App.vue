@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <img alt="Vue logo" src="./assets/MU.png" />
     <!--HelloWorld msg="Welcome to Your Vue.js App" /-->
 
@@ -60,6 +60,7 @@
 
 
 <script>
+
 /* eslint-disable vue/no-unused-components, no-unused-vars */
 
 export default {
@@ -83,6 +84,9 @@ export default {
 </script>
 
 <style>
+
+@import url(https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css);
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -91,9 +95,10 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-</style>
 
-<style>
+
+
+
 table {
   color: #333;
   font-family: Helvetica, Arial, sans-serif;

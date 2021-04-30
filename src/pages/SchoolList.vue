@@ -5,9 +5,9 @@
         <th>Seminary Name</th>        
         <!--td>Location</th-->        
       <tr>
-      <tr v-for='school in schools' v-bind:key='school.key'>
+      <tr v-for='school in schools' v-bind:key='school.SK'>
         <td>
-        <router-link :to="{ name: 'teachers' , params: {skey:school.key}}">    
+        <router-link :to="{ name: 'teachers' , params: {skey:school.SK}}">    
             {{school.name}}
         </router-link>
         </td>

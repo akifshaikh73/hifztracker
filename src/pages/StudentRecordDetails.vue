@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <br />
       <p v-if="errors">
           <b v-if="errors.length">Please fix the error(s):</b>
@@ -11,20 +11,20 @@
 
     <form @submit.prevent="submitRecordDetail">
       <div>
-        <span>Date: </span>
-        <input type="text" v-model="record.SK" required />
+        <label>Date: </label>
+        <input  type="text" v-model="record.SK" required />
       </div>
       <div>
-        <span>Comment: </span>
-        <input class="comment" type="text" v-model="record.comment" required />
+        <label>Comment: </label>
+        <textarea  v-model="record.comment" required />
       </div>
 
       <div v-if="$store.state.login.role == 'teacher'">
-        <span>Absent: </span>
+        <label>Absent: </label>
         <input type="checkbox" v-model="record.absent" required  @input="markAbsent()"/>
       </div>
 
-      <h1>New Lesson</h1>
+      <h4 class="mb-3">New Lesson</h4>
       <br/>
 
       <div>
@@ -32,63 +32,69 @@
         <input  v-model="record.NewLesson.juz" type="number" required :min="1" :max="30"/>
       </div>
       <div>
-        <span>Lines:</span>
+        <label>Lines:</label>
         <input type="number" v-model="record.NewLesson.lines" :min="1" :max="20"/>
       </div>
       <!--
       <div>
-        <span>Page:</span>
+        <label>Page:</label>
         <input type="number" v-model="record.NewLesson.page" required />
       </div>
       -->
       <div>
-      <span>Track:</span>
+      <label>Track:</label>
       <select v-model="record.NewLesson.track">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
       </div>
       <br />
-      <h1>Attached Lesson</h1>
+      <h4 class="mb-3">Attached Lesson</h4>
       <br/>
       <div>
-      <span>Portion:</span>
+      <label>Portion:</label>
       <select v-model="record.CurrentLesson.portion">
           <option v-for="(portion,index) in Object.keys(lists.portions_attached)" :key="index" :value="portion">{{lists.portions_attached[portion]}}</option>
       </select>
       </div>
       <br />
-      <span>Track:</span>
+      <label>Track:</label>
       <select v-model="record.CurrentLesson.track">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
 
-      <h1>Revision</h1>
+      <h4 class="mb-3">Revision</h4>
       <br/>
 
       <div>
         <label>Juz: </label>
-        <input type="number" v-model="record.Revision.juz" required :min="1" :max="30"/>
+        <input type="number" v-model="record.Revision.juz" required :min="1" :max="30" class="textbox"/>
       </div>
       <div>
-        <span>Portion:</span>
+        <label>Portion:</label>
         <select v-model="record.Revision.portion">
           <option v-for="(portion,index) in Object.keys(lists.portions_revision)" :key="index" :value="portion">{{lists.portions_revision[portion]}}</option>
         </select>
       </div>  
       <div>
-        <label>Extra Juz: </label>
+        <label>Mistakes:</label>
+        <select v-model="record.Revision.mistakes">
+        <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
+        </select>   
+      </div>
+      <div>
+        <label>Extra Ajza: </label>
         <input type="string" v-model="record.Revision.extrajuz" />
       </div>
-
+      
+      <!-- Extra Juz Mistakes -->
       <div>
-        <span>Mistakes:</span>
-      <select v-model="record.Revision.mistakes">
-       <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
-      </select>   
-
+        <label>Mistakes:</label>
+        <select v-model="record.Revision.ej_mistakes">
+        <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
+        </select>   
       </div>
       <div>
-      <span>Track:</span>
+      <label>Track:</label>
       <select v-model="record.Revision.track">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
@@ -200,6 +206,7 @@ export default {
       this.record.CurrentLesson.track = 'X';
       this.record.Revision.track = 'X';
     },
+
     submitRecordDetail() {
       var sid = this.$store.state.student.id;
       var skey = this.$store.state.school.key;
@@ -224,6 +231,8 @@ export default {
 </script>
 
 <style>
+@import url(https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css);
+
 h1 {
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   color: #000;
@@ -240,7 +249,23 @@ error {
   color : rgb(128, 6, 6)
 }
 
+.textbox
+{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 .comment {
   width: 25%;
 }
+
+/*
+select {
+    background: #fff;
+    color: black;
+    font-size: 14px;
+    border: none;
+    width: 10%;
+}*/
+
 </style>

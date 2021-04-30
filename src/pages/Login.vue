@@ -22,7 +22,7 @@
     <div>
       <button @click.prevent="submitLogin">Submit</button>
     </div>
-    <div v-if="error">{{ errorMessage }}</div>
+    <div v-if="error" class="error">{{ errorMessage }}</div>
   </form>
 </div>
 </template>
@@ -70,7 +70,7 @@ export default {
             console.log(adminItem);
             console.log(loginRecord);
             if (
-              adminItem.key == loginRecord.id && adminItem.password == loginRecord.password
+              adminItem.LSK == loginRecord.id && adminItem.password == loginRecord.password
             ) {
               this.loggedIn = true;
               resolve(adminItem);
@@ -126,11 +126,14 @@ export default {
             }
           })
           .catch((error) => {
+            console.error(typeof(error));
             console.error(error);
             this.$store.commit("resetLoginContext");
             this.error = true;
             if(typeof(error) == 'string')
               this.errorMessage = error;
+            else if (typeof(error) == 'object')
+              this.errorMessage = error.toString();
             else 
               this.errorMessage = error.response.data;
           });
