@@ -65,7 +65,7 @@ export default {
     var schoolkey = this.$store.state.school.key;
 
     // Get students for a teacher
-    var api_url = `${common.api_base}students/${schoolkey}/teacher/${tid}`;
+    var api_url = `${common.api_base}school/${schoolkey}/teacher/${tid}/students`;
      /*else { //TODO
       // get students of a school
       api_url = `${common.api_base}/school/${tid}/students`;

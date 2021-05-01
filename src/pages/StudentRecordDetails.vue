@@ -223,7 +223,8 @@ export default {
         axios.post(api_url, this.record).then((x) => {
           console.log(x);
         });
-        this.$router.push(`/student/records/${this.$store.state.student.id}`);
+        // to give time for dynamo db eventual consistency 
+        setTimeout(() => {this.$router.push(`/student/records/${this.$store.state.student.id}`)},1000);
       }
     },
   },

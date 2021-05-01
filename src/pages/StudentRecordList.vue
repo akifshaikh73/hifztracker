@@ -131,7 +131,7 @@ export default {
       var skey = this.$store.state.school.key;
 
       const api_url = `${common.api_base}records/${skey}/${sid}/${page}`;
-      console.log(api_url);
+      console.log(`refreshList ${api_url}`);
       axios.get(api_url).then((x) => {
         console.log(x);
         this.records = x.data.filter((record) =>
@@ -140,6 +140,8 @@ export default {
         if(this.records[0] != undefined) {
           var lastRecordDate = this.records[0].SK;
           this.$store.commit("setLastRecord", lastRecordDate);
+        } else {
+          this.$store.commit("resetLastRecord");
         }
         var students = x.data.filter(
           (record) => record.PK == "student::" + skey
@@ -170,7 +172,9 @@ export default {
       axios.delete(api_url, this.record).then((x) => {
         console.log(x);
       });
-      this.refreshList();
+      setTimeout(() => {
+        this.refreshList(1);
+        },1000);
     },
     newRecordDetail() {
       this.$router.push({

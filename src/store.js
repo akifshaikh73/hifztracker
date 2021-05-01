@@ -87,6 +87,10 @@ export default new Vuex.Store({
             console.log("resetTeacher");
             state.teacher.name = null;
             state.teacher.id = null;
+        },
+        resetLastRecord(state) {
+            console.log("resetLastRecord");
+            state.lastrecord = "";
         }
 
     }

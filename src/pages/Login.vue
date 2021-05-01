@@ -54,43 +54,14 @@ export default {
       console.log(api_url);
       return new Promise((resolve, reject) => {
         axios.post(api_url, this.record).then((response) => {
-          if (loginRecord.role == "teacher") {
-            var teacherItem = response.data.Items[0];
-            if (
-              response.data.Items.length == 1 
-            ) {
+            if (response.data.valid) {
+              var responseItem = response.data.Item;
               this.loggedIn = true;
-              resolve(teacherItem);
+              resolve(responseItem);
             } else {
               reject("Invalid Login");
             }
-          }
-          if (loginRecord.role == "super_admin") {
-            var adminItem = response.data.Item;
-            console.log(adminItem);
             console.log(loginRecord);
-            if (
-              adminItem.LSK == loginRecord.id && adminItem.password == loginRecord.password
-            ) {
-              this.loggedIn = true;
-              resolve(adminItem);
-            } else {
-              reject("Invalid Login");
-            }
-          }
-          if (loginRecord.role == "admin") {
-            var schoolItem = response.data.Item;
-            console.log(schoolItem);
-            console.log(loginRecord);
-            if (
-              schoolItem.admin.id == loginRecord.id && schoolItem.admin.password == loginRecord.password
-            ) {
-              this.loggedIn = true;
-              resolve(schoolItem);
-            } else {
-              reject("Invalid Login");
-            }
-          }
         }).catch((error)=>{
           console.error(error);
           reject(error);
@@ -105,6 +76,7 @@ export default {
     },
     submitLogin() {
       this.errors = [];
+      this.record.id = this.record.id.toLowerCase();
       if (this.record.role != "") {
         this.login(this.record)
           .then((data) => {
@@ -118,9 +90,8 @@ export default {
               password: this.record.password,
             });
             if (this.record.role == "teacher") {
-              console.log(data);
               var path =
-                "/students/" +data.SK;
+                "/students/" +this.record.id;
               console.log(path);
               this.$router.push(path);
             }
@@ -132,10 +103,11 @@ export default {
             this.error = true;
             if(typeof(error) == 'string')
               this.errorMessage = error;
-            else if (typeof(error) == 'object')
+            if (typeof(error) == 'object') {
               this.errorMessage = error.toString();
-            else 
-              this.errorMessage = error.response.data;
+              if(error.response != undefined)
+                this.errorMessage = error.response.data;
+            }
           });
       }
     },
