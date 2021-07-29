@@ -6,8 +6,8 @@
       <input type="checkbox" v-model="showAllRecords" required  @input="showRecords()"/>
     </div>
     <table>
-      <tr>
-        <th colspan="2"></th>
+      <tr border="1">
+        <th colspan="2" border="1"></th>
         <th colspan="3">New Lesson</th>
         <th colspan="2">Attached Lesson</th>
         <th colspan="5">Revision</th>
@@ -150,8 +150,8 @@ export default {
         if (students.length > 0) {
           sname = students[0].name;
           this.$store.commit("setStudentObject", { name: sname, id: sid });
-          if (this.$store.state.login.role == "")
-            this.$store.state.login.role = "student";
+          if (this.$store.state.login.role == '')
+                this.$router.push("/login");
         }
 
         this.records.forEach((record) => {

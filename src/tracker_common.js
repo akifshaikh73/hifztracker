@@ -1,5 +1,7 @@
-const api_base = "http://localhost:8081/";
-//const api_base ="https://0ebo0d0gh6.execute-api.us-east-2.amazonaws.com/default/";
+//const api_base = "http://localhost:8081/";
+//const api_base ="https://0ebo0d0gh6.execute-api.us-east-2.amazonaws.com/default/"; // dev
+//const api_base = "https://d32p3ar35d.execute-api.us-east-2.amazonaws.com/Prod/"; // prod
+const api_base = "https://bopm3y50fk.execute-api.us-east-2.amazonaws.com/prod/"; // usem prod
 
 const m_programs = {
     "hifz":"Hifz",

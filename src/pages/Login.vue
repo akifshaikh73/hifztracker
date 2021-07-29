@@ -47,7 +47,11 @@ export default {
       loggedIn: false,
     };
   },
-  created() {},
+  created() {
+        var role = this.$route.params.role;
+        if( role != '')
+          this.record.role = role;
+  },
   methods: {
     login(loginRecord) {
       const api_url = common.api_base + "login/";
@@ -94,6 +98,12 @@ export default {
                 "/students/" +this.record.id;
               console.log(path);
               this.$router.push(path);
+            }
+            if (this.record.role == "student") {
+              var student_path =
+                "/student/records/" +this.record.id;
+              console.log(student_path);
+              this.$router.push(student_path);
             }
           })
           .catch((error) => {

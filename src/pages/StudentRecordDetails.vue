@@ -24,46 +24,70 @@
         <input type="checkbox" v-model="record.absent" required  @input="markAbsent()"/>
       </div>
 
-      <h4 class="mb-3">New Lesson</h4>
-      <br/>
+      <!--------New Lesson ------------------------------->
 
+      <hr/>
+      <h4 class="mb-3">New Lesson</h4>
       <div>
-        <label>Juz: </label>
+        <label>Juz #: </label>
         <input  v-model="record.NewLesson.juz" type="number" required :min="1" :max="30"/>
       </div>
       <div>
-        <label>Lines:</label>
-        <input type="number" v-model="record.NewLesson.lines" :min="1" :max="20"/>
+        <label>Page #:</label>
+        <input type="number" v-model="record.NewLesson.page" required  placeholder="e.g 3"/>
       </div>
-      <!--
       <div>
-        <label>Page:</label>
-        <input type="number" v-model="record.NewLesson.page" required />
+        <label># of Lines (optional):</label>
+        <input type="number" v-model="record.NewLesson.lines" :min="1" :max="20" placeholder="10"/>
       </div>
-      -->
+      <div>
+        <label>Surah (optional):</label>
+        <input type="string" v-model="record.NewLesson.surah" :min="1" :max="20" placeholder="e.g Al-Imran"/>
+      </div>
       <div>
       <label>Track:</label>
       <select v-model="record.NewLesson.track">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
       </div>
-      <br />
+
+      <!--------Attached Lesson ------------------------------->
+      <hr/>
       <h4 class="mb-3">Attached Lesson</h4>
-      <br/>
       <div>
       <label>Portion:</label>
       <select v-model="record.CurrentLesson.portion">
           <option v-for="(portion,index) in Object.keys(lists.portions_attached)" :key="index" :value="portion">{{lists.portions_attached[portion]}}</option>
       </select>
       </div>
-      <br />
       <label>Track:</label>
       <select v-model="record.CurrentLesson.track">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
+      <hr/>
+      <!--------Homework ------------------------------->
+      <h4 class="mb-3">Homework</h4>
+      <div>
+        <label>Juz #: </label>
+        <input  v-model="record.Homework.juz" type="number" required :min="1" :max="30" placeholder="16"/>
+      </div>
+      <div>
+        <label>Page #:</label>
+        <input type="number" v-model="record.Homework.page" required  placeholder="3"/>
+      </div>
+      <div>
+        <label>Ayahs:</label>
+        <input type="string" v-model="record.Homework.ayahs" :min="1" :max="20" placeholder="10-15"/>
+      </div>
+      <div>
+      <label>Track:</label>
+      <select v-model="record.Homework.track">
+        <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
+      </select>
+      </div>
 
+      <hr/>
       <h4 class="mb-3">Revision</h4>
-      <br/>
 
       <div>
         <label>Juz: </label>
@@ -100,7 +124,7 @@
       </select>
       </div>
 
-      <br />
+      <hr/>
 
       <div v-if="$store.state.login.role == 'teacher'">
         <button @click.prevent="submitRecordDetail">Submit</button>
@@ -114,6 +138,7 @@
 import axios from "axios";
 import {
   DefaultNewLesson,
+  DefaultHomework,
   DefaultCurrentLesson,
   DefaultRevision,
 } from "../main";
@@ -141,6 +166,7 @@ export default {
           program: "hifz",
           NewLesson: DefaultNewLesson(),
           CurrentLesson: DefaultCurrentLesson(),
+          Homework: DefaultHomework(),
           Revision: DefaultRevision()
         },
       };
@@ -164,8 +190,10 @@ export default {
         if(this.$store.state.student.name == "" || this.$store.state.student.name == undefined) {
           var student = x.data[0];
           this.$store.commit("setStudentObject", { name: student.name, id: student.SK });
-          if (this.$store.state.login.role == "")
-            this.$store.state.login.role = "student";
+          if (this.$store.state.login.role == "") {
+                //this.$store.state.login.role = "student";
+                this.$router.push("/login");
+          }
         }
 
         this.record = x.data[1]; // 1st element is student item , second is tracking record
@@ -176,6 +204,9 @@ export default {
         }
         if (this.record.CurrentLesson == undefined) {
           this.record.CurrentLesson = DefaultCurrentLesson();
+        }
+        if (this.record.Homework == undefined) {
+          this.record.Homework = DefaultHomework();
         }
         if (this.record.Revision == undefined) {
           this.record.Revision = DefaultRevision();

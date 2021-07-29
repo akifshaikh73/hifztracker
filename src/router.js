@@ -38,12 +38,12 @@ export default new Router(
         component: StudentList
       },
       {
-        path: '/student/records/:student_id/:passkey?/:page?',
+        path: '/student/records/:student_id/:page?',
         name: 'record_list',
         component: StudentRecordList
       },
       {
-        path: '/student/detail/:skey/:student_id/:passkey?/:record_id',
+        path: '/student/detail/:skey/:student_id/:record_id',
         name: 'record_detail',
         component: StudentRecordDetails
       },

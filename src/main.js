@@ -19,6 +19,17 @@ export function DefaultNewLesson() {
   };
 }
 
+export function DefaultHomework() {
+  return {
+    /*
+    juz: 1,
+    ayahs: "1-10",
+    track : "P"
+    */
+  };
+}
+
+
 export function DefaultCurrentLesson() {
   return {
     portion: "current",

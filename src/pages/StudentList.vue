@@ -7,8 +7,10 @@
 
     <tr>
       <th>Student</th>
+      <th>ID</th>
+      <th>Passkey</th>
       <th v-if="$store.state.login.role == 'admin'">Teacher ID</th>
-      <th colspan="2" v-if="$store.state.login.role == 'admin' ">Action</th>
+      <th colspan="2" v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher'">Action</th>
     </tr>
     <tr v-for="s in students" :key="s.SK">
       <td>
@@ -21,13 +23,19 @@
           {{ s.name }}
         </router-link>
       </td>
+      <td>
+        {{ s.SK}}
+      </td>
+      <td>
+        {{ s.passkey}}
+      </td>
       <td v-if="$store.state.login.role == 'admin'">
         <input type="text" v-model="s.LSK" />
       </td>
       <td v-if="$store.state.login.role == 'admin'">
         <button @click="assignTeacherToStudent(s.SK, s.LSK)">Assign</button>
       </td>
-      <td v-if="$store.state.login.role == 'admin'">
+      <td v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher'">
         <button @click="deleteStudent(s.SK)">Delete</button>
       </td>
     </tr>
