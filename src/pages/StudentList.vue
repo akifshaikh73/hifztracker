@@ -8,7 +8,7 @@
     <tr>
       <th>Student</th>
       <th>ID</th>
-      <th>Passkey</th>
+      <th>Password</th>
       <th v-if="$store.state.login.role == 'admin'">Teacher ID</th>
       <th colspan="2" v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher'">Action</th>
     </tr>
@@ -27,7 +27,7 @@
         {{ s.SK}}
       </td>
       <td>
-        {{ s.passkey}}
+        {{ s.password}}
       </td>
       <td v-if="$store.state.login.role == 'admin'">
         <input type="text" v-model="s.LSK" />
@@ -74,9 +74,9 @@ export default {
 
     // Get students for a teacher
     var api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/${tid}/students`;
-     /*else { //TODO
+    /*
       // get students of a school
-      api_url = `${common.getapibase()}/school/${tid}/students`;
+      api_url = `${common.getAPIBase()}/school/${schoolkey}/students`;
     }*/
     this.$store.commit("resetStudentObject");
 
@@ -149,7 +149,7 @@ export default {
         school: this.$store.state.school.name,
         teacher: this.$store.state.teacher.name,
         LSK: this.$store.state.teacher.loginid,
-        passkey: this.guid(5)
+        password: this.guid(5)
       };
       axios.post(api_url, studentItem).then((x) => {
         console.log(x);
