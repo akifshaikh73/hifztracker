@@ -1,4 +1,5 @@
 <template>
+
   <div id="app" class="container">
     <img alt="Vue logo" src="./assets/MU.png" />
     <!--HelloWorld msg="Welcome to Your Vue.js App" /-->
@@ -9,10 +10,15 @@
     <div v-if="$store.state.login.role != ''">
       Role:{{$store.getters.Role}}
     </div>
+    <div v-if="$store.state.login.name != ''">
+      Name:{{$store.state.login.name}}
+    </div>
+    <div v-if="$store.state.school.name != ''">
+      School: {{ this.$store.state.school.name }}
+    </div>
 
     <div      v-if="$store.state.login.role != '' "    >
       <div v-if="$store.state.login.role == 'admin'">
-        School:
         <router-link
           :to="{
             name: 'teachers',
@@ -21,10 +27,22 @@
             },
           }"
         >
-          {{ this.$store.state.school.name }}
+           Teachers
         </router-link>
       </div>
-      <div v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher'">
+      <div v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'principal'">
+        <router-link
+          :to="{
+            name: 'students',
+            params: {
+              skey: this.$store.state.school.key
+            },
+          }"
+        >
+          Students
+        </router-link>
+      </div>
+      <div v-if="$store.state.login.role == 'teacher'">
         <router-link
           :to="{
             name: 'students',
@@ -33,20 +51,21 @@
             },
           }"
         >
-          {{ this.$store.state.teacher.name }}
+          All Students
         </router-link>
       </div>
-      <div v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher' || $store.state.login.role == 'student'">
-        <router-link
-          :to="{
-            name: 'record_list',
-            params: {
-              student_id: this.$store.state.student.id
-            },
-          }"
-        >
-          {{ this.$store.state.student.name }}
-        </router-link>
+      <!--div v-if="$store.state.login.role == 'teacher' || $store.state.login.role == 'student'"-->
+      <div v-if="$store.state.student.id != null  ">
+          <router-link 
+            :to="{
+              name: 'record_list',
+              params: {
+                student_id: this.$store.state.student.id
+              },
+            }"
+          >
+          Daily Records - {{ this.$store.state.student.name }}
+          </router-link>
       </div>
     </div>
     <div v-if="$store.state.login.role != ''">

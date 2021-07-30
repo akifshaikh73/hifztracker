@@ -7,10 +7,16 @@
 
     <tr>
       <th>Student</th>
-      <th>ID</th>
-      <th>Password</th>
-      <th v-if="$store.state.login.role == 'admin'">Teacher ID</th>
-      <th colspan="2" v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher'">Action</th>
+      <th v-if="$store.state.login.role == 'teacher'">
+        ID
+      </th>
+      <th v-if="$store.state.login.role == 'teacher'">
+        Password
+      </th>
+      <th v-if="$store.state.login.role == 'admin'">
+        Teacher ID
+      </th>
+      <th colspan="2" v-if="$store.state.login.role == 'admin' ">Action</th>
     </tr>
     <tr v-for="s in students" :key="s.SK">
       <td>
@@ -23,10 +29,10 @@
           {{ s.name }}
         </router-link>
       </td>
-      <td>
+      <td v-if="$store.state.login.role == 'teacher'">
         {{ s.SK}}
       </td>
-      <td>
+      <td v-if="$store.state.login.role == 'teacher'">
         {{ s.password}}
       </td>
       <td v-if="$store.state.login.role == 'admin'">
@@ -35,7 +41,7 @@
       <td v-if="$store.state.login.role == 'admin'">
         <button @click="assignTeacherToStudent(s.SK, s.LSK)">Assign</button>
       </td>
-      <td v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher'">
+      <td v-if="$store.state.login.role == 'admin' ">
         <button @click="deleteStudent(s.SK)">Delete</button>
       </td>
     </tr>
@@ -72,12 +78,16 @@ export default {
     console.log("teachers id:" + tid);
     var schoolkey = this.$store.state.school.key;
 
-    // Get students for a teacher
-    var api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/${tid}/students`;
-    /*
-      // get students of a school
-      api_url = `${common.getAPIBase()}/school/${schoolkey}/students`;
-    }*/
+    
+    var api_url = '';
+    
+    // get students of a school
+    if(this.$store.state.login.role == 'principal' || this.$store.state.login.role == 'admin')
+      api_url = `${common.getAPIBase()}school/${schoolkey}/students`;
+    else  // Get students for a teacher
+      api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/${tid}/students`;
+
+    
     this.$store.commit("resetStudentObject");
 
     axios.get(api_url).then((x) => {

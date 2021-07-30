@@ -89,7 +89,8 @@ export default {
             this.error = false;
             this.$store.commit("setLogin", {
               role: this.record.role,
-              school: this.record.school,
+              schoolkey: this.record.school,
+              schoolname: data.school,
               name: data.name,
               id: this.record.id,
               password: this.record.password,

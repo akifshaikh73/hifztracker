@@ -7,7 +7,7 @@ export default new Vuex.Store({
     state: {
         school: {
             key: 'usem',
-            name: 'Uthman Seminary'
+            name: ''
         },
         teacher: {
             loginid: '',
@@ -20,8 +20,8 @@ export default new Vuex.Store({
         },
         login: {
             role: '',
-            school: '',
             id: '',
+            name:'',
             password: ''
         },
         program:'hifz',
@@ -46,18 +46,26 @@ export default new Vuex.Store({
         setLogin(state, loginContext) {
             console.log("SetLogin:"+loginContext);
             state.login.role = loginContext.role;
-            state.login.school = loginContext.school;
+            state.school.key = loginContext.schoolkey;
             state.login.id = loginContext.id;
             state.login.password = loginContext.password;
-            state.school.key = loginContext.school;
-            state.school.name = loginContext.name;
+            state.login.name = loginContext.name;
+            if(loginContext.role == "student")
+                state.student.name = loginContext.name;
+            if(loginContext.role == "teacher")
+                state.teacher.name = loginContext.name;
+            if(loginContext.role == "admin" || loginContext.role == "principal") {
+                console.log(`role is ${loginContext.role}`);
+                state.school.name = loginContext.schoolname;
+            }
         },
         resetLoginContext(state) {
             console.log("ReSet");
             state.login.role = "";
-            state.login.school = "";
+            state.login.name = "";
             state.login.id = "";
             state.login.password = "";
+            state.school.name = '';
         },
         setSchoolObject(state, school) {
             console.log("SetSchool");
