@@ -176,22 +176,21 @@ export default {
     }
   },
   created() {
+    common.initAPIURL();
     var rid = this.$route.params.record_id;
     var student_id = this.$route.params.student_id;
-    console.log(this.$store.state);
+    console.log(`Store state ${this.$store.state}`);
     var skey = this.$route.params.skey;
-
     console.log(`${skey}/${student_id}/${rid}`);
     if(rid != 'new') { // New Records will not have a rid
-      const api_url = `${common.api_base}record/${skey}/${student_id}/${rid}`;
-
+      const api_url = `${common.getAPIBase()}record/${skey}/${student_id}/${rid}`;
+      console.log(`API URL ${common.getAPIBase()} ${api_url}`);
       axios.get(api_url).then((x) => {
         console.log(x.data);
         if(this.$store.state.student.name == "" || this.$store.state.student.name == undefined) {
           var student = x.data[0];
           this.$store.commit("setStudentObject", { name: student.name, id: student.SK });
           if (this.$store.state.login.role == "") {
-                //this.$store.state.login.role = "student";
                 this.$router.push("/login");
           }
         }
@@ -247,7 +246,7 @@ export default {
         this.errors.push("1 < Juz < 30");
       } else {
         delete this.errors;
-        const api_url = `${common.api_base}record/${skey}/${sid}/${date}`;
+        const api_url = `${common.getAPIBase()}record/${skey}/${sid}/${date}`;
 
         console.log(api_url);
         console.log(this.record);

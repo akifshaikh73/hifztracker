@@ -54,7 +54,8 @@ export default {
   },
   methods: {
     login(loginRecord) {
-      const api_url = common.api_base + "login/";
+      common.initAPIURL();
+      const api_url = common.getAPIBase() + "login/";
       console.log(api_url);
       return new Promise((resolve, reject) => {
         axios.post(api_url, this.record).then((response) => {

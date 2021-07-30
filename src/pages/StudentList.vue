@@ -73,10 +73,10 @@ export default {
     var schoolkey = this.$store.state.school.key;
 
     // Get students for a teacher
-    var api_url = `${common.api_base}school/${schoolkey}/teacher/${tid}/students`;
+    var api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/${tid}/students`;
      /*else { //TODO
       // get students of a school
-      api_url = `${common.api_base}/school/${tid}/students`;
+      api_url = `${common.getapibase()}/school/${tid}/students`;
     }*/
     this.$store.commit("resetStudentObject");
 
@@ -116,7 +116,7 @@ export default {
         this.error = '';
         // refresh the student list
         console.log("refresh the student list");
-        var api_url = `${common.api_base}school/${schoolkey}/teacher/${this.$store.state.teacher.loginid}/students`;
+        var api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/${this.$store.state.teacher.loginid}/students`;
         axios.get(api_url).then((x) => {
           console.log(x);
           this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
@@ -126,7 +126,7 @@ export default {
     },
     deleteStudent(sid) {
       var schoolkey = this.$store.state.school.key;
-      const api_url = `${common.api_base}school/${schoolkey}/student/${sid}`;
+      const api_url = `${common.getAPIBase()}school/${schoolkey}/student/${sid}`;
       console.log(api_url);
       axios.delete(api_url).then((x) => {
         console.log(x);
@@ -138,7 +138,7 @@ export default {
     },
     addNewStudent() {
       var schoolkey = this.$store.state.school.key;
-      const api_url = `${common.api_base}school/${schoolkey}/student/`;
+      const api_url = `${common.getAPIBase()}school/${schoolkey}/student/`;
       console.log(api_url);
       console.log(this);
       var studentItem = {
@@ -158,7 +158,7 @@ export default {
     },
     assignTeacherToStudent(sid, teacher_id) {
       var schoolkey = this.$store.state.school.key;
-      const api_url = `${common.api_base}school/${schoolkey}/student/`;
+      const api_url = `${common.getAPIBase()}school/${schoolkey}/student/`;
       console.log(api_url);
       console.log(sid + ":" + teacher_id);
       var selectedStudent = this.students.filter(

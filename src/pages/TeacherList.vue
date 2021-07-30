@@ -72,7 +72,7 @@ export default {
     var schoolkey = this.$route.params.skey;
     this.$store.commit('resetTeacherObject');
     this.$store.commit('resetStudentObject');
-    const api_url = `${common.api_base}school/${schoolkey}/teachers`;
+    const api_url = `${common.getAPIBase()}school/${schoolkey}/teachers`;
     axios.get(api_url).then((x) => {
       console.log(x);
       var schoolName = x.data.filter((student) => student.PK == "school")[0].name;
@@ -95,7 +95,7 @@ export default {
   methods: {
     refreshList(schoolkey) {
         this.error = '';
-        const api_url = `${common.api_base}school/${schoolkey}/teachers`;
+        const api_url = `${common.getAPIBase()}school/${schoolkey}/teachers`;
         console.log("refreshing teacher list");
         axios.get(api_url).then((x) => {
           console.log(x);
@@ -106,7 +106,7 @@ export default {
     },
     deleteTeacher(teacherSK) {
       var schoolkey = this.$route.params.skey;
-      const api_url = `${common.api_base}school/${schoolkey}/teacher/${teacherSK}`;
+      const api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/${teacherSK}`;
       console.log(api_url);
       axios.delete(api_url).then((x) => {
         console.log(x);
@@ -128,7 +128,7 @@ export default {
         school: this.$store.state.school.name
       };
 
-      const api_url = `${common.api_base}school/${schoolkey}/teacher/`;
+      const api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/`;
       console.log(api_url);
       console.log(this);
       axios.post(api_url, teacherItem).then((x) => {

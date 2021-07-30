@@ -23,7 +23,6 @@
 import axios from "axios";
 import common from "../tracker_common"
 
-const api_url = common.api_base + "schools/";
 
 
 export default {
@@ -34,6 +33,8 @@ export default {
     };
   },
   created() {
+    common.initAPIURL();
+    const api_url = common.getAPIBase() + "schools/";
     axios.get(api_url).then((x) => {
       console.log(x);
       this.schools = x.data.Items;

@@ -7,7 +7,7 @@
     </div>
     <table>
       <tr border="1">
-        <th colspan="2" border="1"></th>
+        <th colspan="2" ></th>
         <th colspan="3">New Lesson</th>
         <th colspan="2">Attached Lesson</th>
         <th colspan="5">Revision</th>
@@ -116,6 +116,7 @@ export default {
   },
   created() {
     var page = this.$route.params.page;
+    common.initAPIURL();
     this.refreshList(page);
   },
   methods: {
@@ -127,10 +128,11 @@ export default {
         this.refreshList(1);
     },
     refreshList(page) {
+
       var sid = this.$route.params.student_id;
       var skey = this.$store.state.school.key;
 
-      const api_url = `${common.api_base}records/${skey}/${sid}/${page}`;
+      const api_url = `${common.getAPIBase()}records/${skey}/${sid}/${page}`;
       console.log(`refreshList ${api_url}`);
       axios.get(api_url).then((x) => {
         console.log(x);
@@ -167,7 +169,7 @@ export default {
     removeRecord(tracker_date) {
       var sid = this.$store.state.student.id;
       var skey = this.$store.state.school.key;
-      const api_url = `${common.api_base}record/${skey}/${sid}/${tracker_date}`;
+      const api_url = `${common.getAPIBase()}record/${skey}/${sid}/${tracker_date}`;
       console.log(api_url);
       axios.delete(api_url, this.record).then((x) => {
         console.log(x);

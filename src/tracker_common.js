@@ -1,7 +1,10 @@
-//const api_base = "http://localhost:8081/";
-//const api_base ="https://0ebo0d0gh6.execute-api.us-east-2.amazonaws.com/default/"; // dev
-//const api_base = "https://d32p3ar35d.execute-api.us-east-2.amazonaws.com/Prod/"; // prod
-const api_base = "https://bopm3y50fk.execute-api.us-east-2.amazonaws.com/prod/"; // usem prod
+var api_base = '';
+
+const api_map = {
+    "local": "http://localhost:8081/",
+    "dev"  : "https://0ebo0d0gh6.execute-api.us-east-2.amazonaws.com/default/",
+    "prod" : "https://bopm3y50fk.execute-api.us-east-2.amazonaws.com/prod/"
+}
 
 const m_programs = {
     "hifz":"Hifz",
@@ -66,5 +69,21 @@ const m_styles = {
     "X":"absent"
 }
 
+function initAPIURL() {
+    console.log(window.location.origin);
+    var urlpath = window.location.origin;
+    if(urlpath.indexOf("localhost") >0 )
+      api_base = api_map["local"];
+    if(urlpath.indexOf("hifztracker.s3") > 0)
+      api_base = api_map["dev"];
+    if(urlpath.indexOf("hifztrackerp.s3") > 0)
+      api_base = api_map["prod"];
+    console.log(`API BASE URL: ${api_base}`)  ;
+}
 
-module.exports = { api_base, m_portions_attached,m_portions_revision,m_mistakes,m_tracks,m_programs, m_styles,m_days}
+function getAPIBase() {
+    return api_base;
+}
+
+
+module.exports = { api_base ,api_map, m_portions_attached,m_portions_revision,m_mistakes,m_tracks,m_programs, m_styles,m_days, initAPIURL,getAPIBase}
