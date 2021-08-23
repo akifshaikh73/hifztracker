@@ -30,7 +30,15 @@
         </router-link>
       </td>
       <td v-if="$store.state.login.role == 'teacher'">
-        {{ s.SK}}
+        <router-link
+          :to="{
+            name: 'login',
+            params: { role:'student', id: s.SK },
+          }"
+        >
+        {{s.SK}}
+        </router-link>
+
       </td>
       <td v-if="$store.state.login.role == 'teacher'">
         {{ s.password}}

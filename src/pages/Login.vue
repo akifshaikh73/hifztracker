@@ -52,6 +52,13 @@ export default {
         var role = this.$route.params.role;
         if( role != '')
           this.record.role = role;
+        var id = this.$route.params.id;
+        if( id != '')
+          this.record.id = id;
+        console.log(`${role}-${id}`);   
+        var password = this.$route.params.password;
+        if( password != '')
+          this.record.password = password;
   },
   methods: {
     login(loginRecord) {
