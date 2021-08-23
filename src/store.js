@@ -10,7 +10,7 @@ export default new Vuex.Store({
             name: ''
         },
         teacher: {
-            loginid: '',
+            id: '',
             name: '',
             program:''
         },
@@ -44,9 +44,12 @@ export default new Vuex.Store({
             console.log(state.lastrecord);
         },
         setLogin(state, loginContext) {
-            console.log("SetLogin:"+loginContext);
+            console.log(`role is ${loginContext.role}`);
+            console.log("SetLogin:");
+            console.log(loginContext);
             state.login.role = loginContext.role;
             state.school.key = loginContext.schoolkey;
+            state.school.name = loginContext.schoolname;
             state.login.id = loginContext.id;
             state.login.password = loginContext.password;
             state.login.name = loginContext.name;
@@ -54,10 +57,10 @@ export default new Vuex.Store({
                 state.student.name = loginContext.name;
             if(loginContext.role == "teacher")
                 state.teacher.name = loginContext.name;
+            /*
             if(loginContext.role == "admin" || loginContext.role == "principal") {
-                console.log(`role is ${loginContext.role}`);
                 state.school.name = loginContext.schoolname;
-            }
+            }*/
         },
         resetLoginContext(state) {
             console.log("ReSet");
@@ -77,7 +80,7 @@ export default new Vuex.Store({
             console.log("SetTeacherObject");
             console.log(teacher.name);
             state.teacher.name = teacher.name;
-            state.teacher.loginid = teacher.loginid;
+            state.teacher.id = teacher.id;
             state.teacher.program = teacher.program;
         },
         setStudentObject(state, student) {
@@ -88,7 +91,7 @@ export default new Vuex.Store({
         },
         resetStudentObject(state) {
             console.log("resetStudent");
-            state.student.name = null;
+            state.student.name = null;  
             state.student.id = null;
         },
         resetTeacherObject(state) {

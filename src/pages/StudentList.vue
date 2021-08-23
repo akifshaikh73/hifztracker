@@ -57,9 +57,13 @@
   </table>
     <span v-if="$store.state.login.role == 'admin' || $store.state.login.role == 'teacher'">
         Name:<input type="text" v-model="newStudent" />
-        loginid:<input type="text" v-model="loginID" />
+        <span v-if="$store.state.login.role == 'admin'">
+          Teacher ID:<input type="text" v-model="teacherid" />
+        </span>
+        loginid:<input type="text" v-model="id" />
         <button @click="addNewStudent">Add</button>
       </span>
+
   </div>
 </template>
 <script>
@@ -75,8 +79,7 @@ export default {
     return {
       error :'',
       students: [],
-      newStudent: "Name",
-      //loginid: "LoginId",
+      newStudent: "Name"
     };
   },
   created() {
@@ -105,7 +108,7 @@ export default {
       if (teachers.length > 0)
         this.$store.commit("setTeacherObject", {
           name: teachers[0].name,
-          loginid:teachers[0].SK,
+          id:teachers[0].SK,
           program: teachers[0].program
         });
 
@@ -113,7 +116,7 @@ export default {
     });
   },
   computed: {
-    loginID() {
+    id() {
       return this.newStudent.replace(' ','.').toLowerCase();
     }
   },
@@ -134,13 +137,18 @@ export default {
         this.error = '';
         // refresh the student list
         console.log("refresh the student list");
-        var api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/${this.$store.state.teacher.loginid}/students`;
+        var api_url = '';
+        if(this.$store.state.login.role == 'admin')
+          api_url = `${common.getAPIBase()}school/${schoolkey}/students`;
+        else  // Get students for a teacher
+          api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/${this.$store.state.teacher.id}/students`;
+
         axios.get(api_url).then((x) => {
           console.log(x);
           this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
         });
         this.newStudent = "";
-        this.loginid = "";
+        this.id = "";
     },
     deleteStudent(sid) {
       var schoolkey = this.$store.state.school.key;
@@ -162,13 +170,16 @@ export default {
       var studentItem = {
         PK: `student::${schoolkey}`,
         name: this.newStudent,
-        SK : this.loginID,
+        SK : this.id,
         program: this.$store.state.teacher.program,
         school: this.$store.state.school.name,
         teacher: this.$store.state.teacher.name,
-        LSK: this.$store.state.teacher.loginid,
         password: this.guid(5)
       };
+      if(this.$store.state.login.role == 'teacher')
+        studentItem.LSK = this.$store.state.teacher.id;
+      else   
+        studentItem.LSK = this.teacherid;
       axios.post(api_url, studentItem).then((x) => {
         console.log(x);
         this.refreshList(schoolkey);

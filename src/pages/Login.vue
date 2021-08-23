@@ -93,7 +93,9 @@ export default {
       if (this.record.role != "") {
         this.login(this.record)
           .then((data) => {
-            console.log("Login successful+" + this.record);
+            console.log("Login successful+");
+            console.log(this.record);
+            console.log(data);
             this.error = false;
             this.$store.commit("setLogin", {
               role: this.record.role,

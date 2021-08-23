@@ -46,7 +46,7 @@
           :to="{
             name: 'students',
             params: {
-              tid: this.$store.state.teacher.loginid
+              tid: this.$store.state.teacher.id
             },
           }"
         >
