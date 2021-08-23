@@ -10,6 +10,7 @@
         <td>Role:</td>
         <input type="text" v-model="record.role" required />
       </tr>
+      
       <tr>
         <td>ID:</td>
         <input type="text" v-model="record.id" required />

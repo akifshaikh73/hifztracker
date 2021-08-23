@@ -23,12 +23,13 @@ const m_portions_revision = {
     }
 
 const m_portions_attached = {
-    "current" : "To Current",
+    "current" : "Beginning to Current",
     "l5":"Last 5 pages",
     "l10":"Last 10 pages",
     "l20":"Last 20 pages",
     "h1":"1st Half",
     "h2":"2nd Half",
+    "other":"Other"
 }
 
 const m_mistakes = {

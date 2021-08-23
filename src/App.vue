@@ -1,5 +1,4 @@
 <template>
-
   <div id="app" class="container">
     <img alt="Vue logo" src="./assets/MU.png" />
     <!--HelloWorld msg="Welcome to Your Vue.js App" /-->
@@ -64,7 +63,7 @@
               },
             }"
           >
-          Daily Records - {{ this.$store.state.student.name }}
+          Report - {{ this.$store.state.student.name }}
           </router-link>
       </div>
     </div>
@@ -123,19 +122,24 @@ table {
   font-family: Helvetica, Arial, sans-serif;
   width: 640px;
   border-collapse: collapse;
-  border-spacing: 0;
+  border-spacing: 1;
 }
-
+/*
 td,
 th {
-  border: 1px solid transparent; /* No more visible border */
+  border: 1px solid ; //No more visible border 
   height: 30px;
-  transition: all 0.3s; /* Simple transition for hover effect */
+  transition: all 0.3s; // Simple transition for hover effect 
+  text-align: center;
 }
+*/
 
 th {
+  border: black;
   background: #dfdfdf; /* Darken header a bit */
   font-weight: bold;
+  text-align: center;
+  border:1px solid #050505;
 }
 
 td {

@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <br />
-      <p v-if="errors">
-          <b v-if="errors.length">Please fix the error(s):</b>
+      <p v-if="m_errors">
+          <b v-if="m_errors.length">Please fix the error(s):</b>
           <ul class="error">
-            <li v-for="error in errors" :key="error.id">{{ error }}</li>
+            <li v-for="error in m_errors" :key="error.id">{{ error }}</li>
           </ul>
       </p>
       <br/>
@@ -20,7 +20,7 @@
       </div>
 
       <div v-if="$store.state.login.role == 'teacher'">
-        <label>Absent: </label>
+      <label>Absent All Day: </label>
         <input type="checkbox" v-model="record.absent" required  @input="markAbsent()"/>
       </div>
 
@@ -33,19 +33,19 @@
         <input  v-model="record.NewLesson.juz" type="number" required :min="1" :max="30"/>
       </div>
       <div>
-        <label>Page #:</label>
-        <input type="number" v-model="record.NewLesson.page" required  placeholder="e.g 3"/>
-      </div>
-      <div>
-        <label># of Lines (optional):</label>
+        <label># of Lines :</label>
         <input type="number" v-model="record.NewLesson.lines" :min="1" :max="20" placeholder="10"/>
       </div>
       <div>
-        <label>Surah (optional):</label>
-        <input type="string" v-model="record.NewLesson.surah" :min="1" :max="20" placeholder="e.g Al-Imran"/>
+        <label>Page #(optional):</label>
+        <input type="number" v-model="record.NewLesson.page" required  placeholder="3"/>
       </div>
       <div>
-      <label>Track:</label>
+        <label>Surah (optional):</label>
+        <input type="string" v-model="record.NewLesson.surah" :min="1" :max="20" placeholder="Al-Imran"/>
+      </div>
+      <div>
+      <label>{{tracklabel}}:</label>
       <select v-model="record.NewLesson.track">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
@@ -60,71 +60,107 @@
           <option v-for="(portion,index) in Object.keys(lists.portions_attached)" :key="index" :value="portion">{{lists.portions_attached[portion]}}</option>
       </select>
       </div>
-      <label>Track:</label>
+
+      <div v-if="record.CurrentLesson.portion == 'other'">
+        <label>Other:</label>
+        <input type="string" v-model="record.CurrentLesson.other" :min="1" :max="20" placeholder="Lines , Page # etc"/>
+      </div>
+
+      <label>{{tracklabel}}:</label>
       <select v-model="record.CurrentLesson.track">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
       <hr/>
-      <!--------Homework ------------------------------->
-      <h4 class="mb-3">Homework</h4>
-      <div>
-        <label>Juz #: </label>
-        <input  v-model="record.Homework.juz" type="number" required :min="1" :max="30" placeholder="16"/>
-      </div>
-      <div>
-        <label>Page #:</label>
-        <input type="number" v-model="record.Homework.page" required  placeholder="3"/>
-      </div>
-      <div>
-        <label>Ayahs:</label>
-        <input type="string" v-model="record.Homework.ayahs" :min="1" :max="20" placeholder="10-15"/>
-      </div>
-      <div>
-      <label>Track:</label>
-      <select v-model="record.Homework.track">
-        <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
-      </select>
-      </div>
 
-      <hr/>
+      <!--------Revision ------------------------------->
       <h4 class="mb-3">Revision</h4>
 
       <div>
         <label>Juz: </label>
-        <input type="number" v-model="record.Revision.juz" required :min="1" :max="30" class="textbox"/>
+        <input type="number" v-model="record.Revision.ajza[0].juz" required :min="1" :max="30" class="textbox"/>
       </div>
       <div>
         <label>Portion:</label>
-        <select v-model="record.Revision.portion">
+        <select v-model="record.Revision.ajza[0].portion">
           <option v-for="(portion,index) in Object.keys(lists.portions_revision)" :key="index" :value="portion">{{lists.portions_revision[portion]}}</option>
         </select>
       </div>  
       <div>
         <label>Mistakes:</label>
-        <select v-model="record.Revision.mistakes">
+        <select v-model="record.Revision.ajza[0].mistakes">
         <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
         </select>   
       </div>
       <div>
-        <label>Extra Ajza: </label>
-        <input type="string" v-model="record.Revision.extrajuz" />
+        <label>{{tracklabel}}:</label>
+        <select v-model="record.Revision.ajza[0].track">
+          <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
+        </select>
       </div>
       
-      <!-- Extra Juz Mistakes -->
       <div>
-        <label>Mistakes:</label>
-        <select v-model="record.Revision.ej_mistakes">
-        <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
-        </select>   
-      </div>
-      <div>
-      <label>Track:</label>
-      <select v-model="record.Revision.track">
-        <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
-      </select>
+        <label>Extra Juz: </label>
+        <input type="checkbox" v-model="record.Revision.extraJuz" required  @input="setExtraJuz()"/>
       </div>
 
+      <div v-if="record.Revision.extraJuz">
+        <div>
+          <label>Extra Juz 1: </label>
+          <input type="number" v-model="record.Revision.ajza[1].juz" required :min="1" :max="30" class="textbox" placeholder="2"/>
+        </div>
+        
+        <div>
+          <label>Mistakes:</label>
+          <select v-model="record.Revision.ajza[1].mistakes">
+          <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
+          </select>   
+        </div>
+
+        <div>
+          <label>{{tracklabel}}:</label>
+          <select v-model="record.Revision.ajza[1].track">
+            <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Extra Juz 2: </label>
+          <input type="number" v-model="record.Revision.ajza[2].juz" required :min="1" :max="30" class="textbox" placeholder="3"/>
+        </div>
+        
+        <div>
+          <label>Mistakes:</label>
+          <select v-model="record.Revision.ajza[2].mistakes">
+          <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
+          </select>   
+        </div>
+
+        <div>
+          <label>{{tracklabel}}:</label>
+          <select v-model="record.Revision.ajza[2].track">
+            <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
+          </select>
+        </div>
+      </div>
+
+
       <hr/>
+      <!--------Homework ------------------------------->
+      <h4 class="mb-3">Homework</h4>
+      <div>
+        <label>New Lesson: </label>
+        <input type="string" v-model="record.Homework.newLesson" placeholder="# of Lines , Surah or Ayahs"/>
+      </div>
+      <label>Attached Lesson:</label>
+      <select v-model="record.Homework.attachedLesson">
+          <option v-for="(portion,index) in Object.keys(lists.portions_attached)" :key="index" :value="portion">{{lists.portions_attached[portion]}}</option>
+      </select>
+      <div>
+        <label>Revision:</label>
+        <input type="string" v-model="record.Homework.revision"  placeholder="Juz #, Extra Juz"/>
+      </div>
+      <div>
+      </div>
 
       <div v-if="$store.state.login.role == 'teacher'">
         <button @click.prevent="submitRecordDetail">Submit</button>
@@ -154,7 +190,8 @@ export default {
     console.log("data():" + datestring);
     if (this.record == undefined)
       return {
-        errors: [],
+        tracklabel :"Performance",
+        m_errors: [],
         lists : {
           mistakes : common.m_mistakes,
           tracks : common.m_tracks,
@@ -196,7 +233,7 @@ export default {
         }
 
         this.record = x.data[1]; // 1st element is student item , second is tracking record
-        this.errors = [];
+        this.m_errors = [];
 
         if (this.record.NewLesson == undefined) {
           this.record.NewLesson = DefaultNewLesson();
@@ -212,7 +249,7 @@ export default {
         }
       }).catch((error)=>{
         console.error(error.response);
-        this.errors.push(error.response.data);
+        this.m_errors.push(error.response.data);
       });
     } else {
       // New Record
@@ -228,24 +265,36 @@ export default {
     }
   },
   methods: {
+    setExtraJuz() {
+      console.log(`Extra Juz ${this.record.Revision.extraJuz}`);
+
+    },
+
     markAbsent() {
-      this.record.NewLesson = DefaultNewLesson();
-      this.record.CurrentLesson = DefaultCurrentLesson();
-      this.record.Revision = DefaultRevision();
+      console.log(`Absent: ${this.record.absent}`);
+      //this.record.NewLesson = DefaultNewLesson();
+      //this.record.CurrentLesson = DefaultCurrentLesson();
+      //this.record.Revision = DefaultRevision();
       this.record.NewLesson.track = 'X';
       this.record.CurrentLesson.track = 'X';
-      this.record.Revision.track = 'X';
+      this.record.Revision.ajza[0].track = 'X';
+      this.record.Revision.ajza[1].track = 'X';
+      this.record.Revision.ajza[2].track = 'X';
     },
 
     submitRecordDetail() {
       var sid = this.$store.state.student.id;
       var skey = this.$store.state.school.key;
       var date = this.record.SK;
-      this.errors = [];
+      this.m_errors = [];
+      if(this.record.CurrentLesson.portion != 'other') {
+        this.record.CurrentLesson.other = ''
+      }
+
       if (this.record.NewLesson.juz > 30 || this.record.Revision.juz > 30) {
-        this.errors.push("1 < Juz < 30");
+        this.m_errors.push("1 < Juz < 30");
       } else {
-        delete this.errors;
+        delete this.m_errors;
         const api_url = `${common.getAPIBase()}record/${skey}/${sid}/${date}`;
 
         console.log(api_url);

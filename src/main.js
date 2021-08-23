@@ -33,16 +33,36 @@ export function DefaultHomework() {
 export function DefaultCurrentLesson() {
   return {
     portion: "current",
+    other:"",
     track: "P"
   };
 }
 
 export function DefaultRevision() {
   return {
-    portion: "full",
-    juz: 1,
-    mistakes: "0-1",
-    track: "P"
+    //portion: "full",
+    //juz: 1,
+    //mistakes: "0-1",
+    //track: "P",
+    extraJuz : false,
+    ajza: [
+      {
+        juz:1,
+        portion: "full",
+        mistakes: "0-1",
+        track: "P",
+      },
+      {
+        juz:2,
+        mistakes: "0-1",
+        track: "P",
+      },
+      {
+        juz:3,
+        mistakes: "0-1",
+        track: "P",
+      }
+    ]
   };
 }
 

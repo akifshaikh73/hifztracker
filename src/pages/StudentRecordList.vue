@@ -5,16 +5,17 @@
       <span>Show All Records: </span>
       <input type="checkbox" v-model="showAllRecords" required  @input="showRecords()"/>
     </div>
-    <table>
+    <table class="table-bordered">
+      <thead>
       <tr border="1">
         <th colspan="2" ></th>
-        <th colspan="3">New Lesson</th>
-        <th colspan="2">Attached Lesson</th>
-        <th colspan="5">Revision</th>
+        <th colspan="3" style="text-align:center">New Lesson</th>
+        <th colspan="2" style="text-align:center">Attached</th>
+        <th colspan="5" style="text-align:center">Revision</th>
       </tr>
       <tr>
         <th>Day</th>
-        <th width="150px">Date</th>
+        <th width="250px">Date</th>
         <th>Juz</th>
         <th>Lines</th>
         <th>Track</th>
@@ -26,6 +27,8 @@
         <th>Track</th>
         <th v-if="$store.state.login.role == 'teacher'">Action</th>
       </tr>
+      </thead>
+      <tbody>
 
       <tr v-for="record in records" :key="record.SK">
         <td>
@@ -45,7 +48,7 @@
           </router-link>
         </td>
         <td v-if="record.NewLesson.track == 'X'" colspan="3" class="absent">
-          Absent
+          Absent 
         </td>
           <td v-if="record.NewLesson.track != 'X'">
             {{ record.NewLesson.juz }}
@@ -66,26 +69,27 @@
           {{ record.CurrentLesson.track }}
         </td>
 
-        <td v-if="record.Revision.track == 'X'" colspan="4" class="absent">
+        <td v-if="record.Revision.ajza[0].track == 'X'" colspan="4" class="absent">
           Absent
         </td>
-        <td v-if="record.Revision.track != 'X'">
+        <td v-if="record.Revision.ajza[0].track != 'X'">
           {{ record.Revision.juz }}
         </td>
-        <td v-if="record.Revision.track != 'X'">
+        <td v-if="record.Revision.ajza[0].track != 'X'">
           {{ lists.portions_revision[record.Revision.portion] }}
         </td>
-        <td v-if="record.Revision.track != 'X'">
+        <td v-if="record.Revision.ajza[0].track != 'X'">
           {{ record.Revision.mistakes }}
         </td>
-        <td v-if="record.Revision.track != 'X'" :class="m_styles[record.Revision.track]">
-          {{ record.Revision.track }}
+        <td v-if="record.Revision.ajza[0].track != 'X'" :class="m_styles[record.Revision.ajza[0].track]">
+          {{ record.Revision.ajza[0].track }}
         </td>
 
         <td v-if="$store.state.login.role == 'teacher'">
           <button @click="removeRecord(record.SK)">Delete</button>
         </td>
       </tr>
+      </tbody>
     </table>
     <div v-if="$store.state.login.role == 'teacher'">
       <button @click="newRecordDetail">Add Record</button>
