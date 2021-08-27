@@ -73,13 +73,13 @@
           Absent
         </td>
         <td v-if="record.Revision.ajza[0].track != 'X'">
-          {{ record.Revision.juz }}
+          {{ record.Revision.ajza[0].juz }}
         </td>
         <td v-if="record.Revision.ajza[0].track != 'X'">
-          {{ lists.portions_revision[record.Revision.portion] }}
+          {{ lists.portions_revision[record.Revision.ajza[0].portion] }}
         </td>
         <td v-if="record.Revision.ajza[0].track != 'X'">
-          {{ record.Revision.mistakes }}
+          {{ record.Revision.ajza[0].mistakes }}
         </td>
         <td v-if="record.Revision.ajza[0].track != 'X'" :class="m_styles[record.Revision.ajza[0].track]">
           {{ record.Revision.ajza[0].track }}

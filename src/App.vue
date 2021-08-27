@@ -80,7 +80,6 @@
 <script>
 
 /* eslint-disable vue/no-unused-components, no-unused-vars */
-
 export default {
   name: "App",
   data() {

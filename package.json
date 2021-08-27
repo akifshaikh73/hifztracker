@@ -1,6 +1,6 @@
 {
   "name": "HifzTracker",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "fs": "0.0.1-security",
     "v-clipboard": "^2.2.3",
     "vue": "^2.6.11",
     "vue-router": "^3.4.8",
