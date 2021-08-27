@@ -33,7 +33,7 @@
         <router-link
           :to="{
             name: 'login',
-            params: { role:'student', id: s.SK },
+            params: { role:'student', id: s.SK , password: s.password},
           }"
         >
         {{s.SK}}
@@ -170,7 +170,7 @@ export default {
       var studentItem = {
         PK: `student::${schoolkey}`,
         name: this.newStudent,
-        SK : this.id,
+        SK : this.id.trim(),
         program: this.$store.state.teacher.program,
         school: this.$store.state.school.name,
         teacher: this.$store.state.teacher.name,
