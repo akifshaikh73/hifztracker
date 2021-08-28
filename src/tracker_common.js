@@ -86,5 +86,62 @@ function getAPIBase() {
     return api_base;
 }
 
-
-module.exports = { api_base ,api_map, m_portions_attached,m_portions_revision,m_mistakes,m_tracks,m_programs, m_styles,m_days, initAPIURL,getAPIBase}
+ function DefaultNewLesson() {
+    return {
+      juz: 1,
+      lines: 1,
+      track : "P"
+    };
+  }
+  
+ function DefaultHomework() {
+    return {
+      /*
+      juz: 1,
+      ayahs: "1-10",
+      track : "P"
+      */
+    };
+  }
+  
+  
+ function DefaultCurrentLesson() {
+    return {
+      portion: "current",
+      other:"",
+      track: "P"
+    };
+  }
+  
+ function DefaultRevision() {
+    return {
+      //portion: "full",
+      //juz: 1,
+      //mistakes: "0-1",
+      //track: "P",
+      extraJuz : false,
+      ajza: [
+        {
+          juz:1,
+          portion: "full",
+          mistakes: "0-1",
+          track: "P",
+        },
+        {
+          juz:2,
+          mistakes: "0-1",
+          track: "P",
+        },
+        {
+          juz:3,
+          mistakes: "0-1",
+          track: "P",
+        }
+      ]
+    };
+  }
+  
+module.exports = { api_base ,api_map, 
+    m_portions_attached,m_portions_revision,m_mistakes,m_tracks,m_programs, m_styles,m_days,
+    DefaultNewLesson,DefaultHomework,DefaultCurrentLesson,DefaultRevision,
+    initAPIURL,getAPIBase}

@@ -1,7 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import {
+    DefaultNewLesson,
+    DefaultHomework,
+    DefaultCurrentLesson,
+    DefaultRevision,
+  } from './tracker_common';
+  
 Vue.use(Vuex)
+
+
 
 export default new Vuex.Store({
     state: {
@@ -25,7 +33,13 @@ export default new Vuex.Store({
             password: ''
         },
         program:'hifz',
-        lastrecord:''
+        lastRecordDate:'',
+        lastRecord:{
+            NewLesson: DefaultNewLesson(),
+            CurrentLesson: DefaultCurrentLesson(),
+            Homework: DefaultHomework(),
+            Revision: DefaultRevision()
+        }
     },
     getters: {
         // ...
@@ -39,10 +53,6 @@ export default new Vuex.Store({
         }
       },
     mutations: {
-        setLastRecord(state,recordDate) {
-            state.lastrecord = recordDate;
-            console.log(state.lastrecord);
-        },
         setLogin(state, loginContext) {
             console.log(`role is ${loginContext.role}`);
             console.log("SetLogin:");
@@ -99,10 +109,28 @@ export default new Vuex.Store({
             state.teacher.name = null;
             state.teacher.id = null;
         },
-        resetLastRecord(state) {
-            console.log("resetLastRecord");
-            state.lastrecord = "";
-        }
+        resetlastRecordDate(state) {
+            console.log("resetlastRecordDate");
+            state.lastRecordDate = "";
+        },
+        setlastRecordDate(state,recordDate) {
+            state.lastRecordDate = recordDate;
+            console.log(state.lastRecordDate);
+        },
+        resetlastRecord(state) {
+            console.log("resetlastRecord");
+            state.lastRecord = {
+                NewLesson: DefaultNewLesson(),
+                CurrentLesson: DefaultCurrentLesson(),
+                Homework: DefaultHomework(),
+                Revision: DefaultRevision()
+            };
+  
+        },
+        setlastRecord(state,record) {
+            state.lastRecord = record;
+            console.log(state.lastRecord);
+        },
 
     }
 })

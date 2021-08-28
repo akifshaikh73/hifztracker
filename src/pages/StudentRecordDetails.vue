@@ -177,7 +177,7 @@ import {
   DefaultHomework,
   DefaultCurrentLesson,
   DefaultRevision,
-} from "../main";
+} from "../tracker_common";
 
 import common from "../tracker_common"
 
@@ -201,10 +201,11 @@ export default {
         record: {
           SK: datestring,
           program: "hifz",
-          NewLesson: DefaultNewLesson(),
-          CurrentLesson: DefaultCurrentLesson(),
-          Homework: DefaultHomework(),
-          Revision: DefaultRevision()
+          // Default the data from the stored state
+          NewLesson: this.$store.state.lastRecord.NewLesson,
+          CurrentLesson: this.$store.state.lastRecord.CurrentLesson,
+          Homework: this.$store.state.lastRecord.Homework,
+          Revision: this.$store.state.lastRecord.Revision
         },
       };
     else {
@@ -253,12 +254,13 @@ export default {
       });
     } else {
       // New Record
-      console.log(this.$store.state.lastrecord);
-      if(this.$store.state.lastrecord != '') {
-        var lastRecordDate = new Date(this.$store.state.lastrecord);
+      console.log(this.$store.state.lastRecordDate);
+      if(this.$store.state.lastRecordDate != '') {
+        var lastRecordDate = new Date(this.$store.state.lastRecordDate);
         lastRecordDate.setDate(lastRecordDate.getDate()+1);
         var strLastDate = (new Date(lastRecordDate)).toISOString().split('T')[0];
         console.log(strLastDate);
+        console.log(this.record);
         this.record.SK = strLastDate;
       }
 

@@ -100,7 +100,7 @@
 /* eslint-disable vue/no-unused-components, no-unused-vars */
 
 import axios from "axios";
-import { DefaultCurrentLesson, DefaultRevision, portions } from "../main";
+import { DefaultCurrentLesson, DefaultRevision, portions } from "../tracker_common";
 
 import common from "../tracker_common";
 
@@ -145,9 +145,9 @@ export default {
         );
         if(this.records[0] != undefined) {
           var lastRecordDate = this.records[0].SK;
-          this.$store.commit("setLastRecord", lastRecordDate);
+          this.$store.commit("setlastRecordDate", lastRecordDate);
         } else {
-          this.$store.commit("resetLastRecord");
+          this.$store.commit("resetlastRecordDate");
         }
         var students = x.data.filter(
           (record) => record.PK == "student::" + skey
@@ -183,6 +183,12 @@ export default {
         },1000);
     },
     newRecordDetail() {
+      if(this.records.length > 0 ) {
+        // Store the latest record in the state - so it can be defaulted for a new record
+        var lastRecrod = this.records[0];
+        console.log(lastRecrod);
+        this.$store.commit("setlastRecord", lastRecrod);
+      }
       this.$router.push({
         name: "record_detail",
         params: { record_id: "new" },
