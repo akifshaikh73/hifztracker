@@ -1,6 +1,10 @@
 <template>
   <div id="app" class="container">
     <img alt="Vue logo" src="./assets/MU.png" />
+    
+    <div>
+      <h5> Hifz Tracker  {{version}}</h5>
+    </div>
     <!--HelloWorld msg="Welcome to Your Vue.js App" /-->
 
     <div class="nav" v-if="$store.state.login.role == 'super_admin'">
@@ -83,7 +87,9 @@
 export default {
   name: "App",
   data() {
-    return {};
+    return {
+      version : "1.0.0"
+    };
   },
   mounted() {
     //console.log(this.$route.query.role);

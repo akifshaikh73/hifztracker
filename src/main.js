@@ -24,9 +24,6 @@ export let portions = {
   "current": "Current Juz"
 }
 
-/*
-const fs = require('fs')
-const packageJson = fs.readFileSync('./package.json')
-export const version = JSON.parse(packageJson).version || 0
-*/
+
+
 
