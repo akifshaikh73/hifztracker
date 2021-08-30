@@ -74,8 +74,11 @@
     <div v-if="$store.state.login.role != ''">
       <a href="#" v-on:click="logOut">Logout</a>
     </div>
-
-    <router-view></router-view>
+<router-view></router-view>
+  <div>
+    <a href="mailto:aws@uthmanacademy.org">Support</a> 
+  </div>  
+  
   </div>
 </template>
 

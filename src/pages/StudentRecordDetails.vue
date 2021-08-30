@@ -12,11 +12,11 @@
     <form @submit.prevent="submitRecordDetail">
       <div>
         <label>Date: </label>
-        <input  type="text" v-model="record.SK" required />
+        <input  type="text" v-model="record.SK" required v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
         <label>Comment: </label>
-        <textarea  v-model="record.comment" required />
+        <textarea  v-model="record.comment" required v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
 
       <div v-if="$store.state.login.role == 'teacher'">
@@ -30,23 +30,23 @@
       <h4 class="mb-3">New Lesson</h4>
       <div>
         <label>Juz #: </label>
-        <input  v-model="record.NewLesson.juz" type="number" required :min="1" :max="30"/>
+        <input  v-model="record.NewLesson.juz" type="number" required :min="1" :max="30" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
         <label># of Lines :</label>
-        <input type="number" v-model="record.NewLesson.lines" :min="1" :max="20" placeholder="10"/>
+        <input type="number" v-model="record.NewLesson.lines" :min="1" :max="20" placeholder="10" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
         <label>Page #(optional):</label>
-        <input type="number" v-model="record.NewLesson.page" required  placeholder="3"/>
+        <input type="number" v-model="record.NewLesson.page" required  placeholder="3" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
         <label>Surah (optional):</label>
-        <input type="string" v-model="record.NewLesson.surah" :min="1" :max="20" placeholder="Al-Imran"/>
+        <input type="string" v-model="record.NewLesson.surah" :min="1" :max="20" placeholder="Al-Imran" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
       <label>{{tracklabel}}:</label>
-      <select v-model="record.NewLesson.track">
+      <select v-model="record.NewLesson.track" v-bind:disabled="$store.state.login.role == 'student'">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
       </div>
@@ -56,18 +56,18 @@
       <h4 class="mb-3">Attached Lesson</h4>
       <div>
       <label>Portion:</label>
-      <select v-model="record.CurrentLesson.portion">
+      <select v-model="record.CurrentLesson.portion" v-bind:disabled="$store.state.login.role == 'student'">
           <option v-for="(portion,index) in Object.keys(lists.portions_attached)" :key="index" :value="portion">{{lists.portions_attached[portion]}}</option>
       </select>
       </div>
 
       <div v-if="record.CurrentLesson.portion == 'other'">
         <label>Other:</label>
-        <input type="string" v-model="record.CurrentLesson.other" :min="1" :max="20" placeholder="Lines , Page # etc"/>
+        <input type="string" v-model="record.CurrentLesson.other" :min="1" :max="20" placeholder="Lines , Page # etc" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
 
       <label>{{tracklabel}}:</label>
-      <select v-model="record.CurrentLesson.track">
+      <select v-model="record.CurrentLesson.track" v-bind:disabled="$store.state.login.role == 'student'">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
       <hr/>
@@ -77,67 +77,67 @@
 
       <div>
         <label>Juz: </label>
-        <input type="number" v-model="record.Revision.ajza[0].juz" required :min="1" :max="30" class="textbox"/>
+        <input type="number" v-model="record.Revision.ajza[0].juz" required :min="1" :max="30" class="textbox" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
         <label>Portion:</label>
-        <select v-model="record.Revision.ajza[0].portion">
+        <select v-model="record.Revision.ajza[0].portion" v-bind:disabled="$store.state.login.role == 'student'">
           <option v-for="(portion,index) in Object.keys(lists.portions_revision)" :key="index" :value="portion">{{lists.portions_revision[portion]}}</option>
         </select>
       </div>  
       <div>
         <label>Mistakes:</label>
-        <select v-model="record.Revision.ajza[0].mistakes">
+        <select v-model="record.Revision.ajza[0].mistakes" v-bind:disabled="$store.state.login.role == 'student'">
         <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
         </select>   
       </div>
       <div>
         <label>{{tracklabel}}:</label>
-        <select v-model="record.Revision.ajza[0].track">
+        <select v-model="record.Revision.ajza[0].track" v-bind:disabled="$store.state.login.role == 'student'">
           <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
         </select>
       </div>
       
       <div>
         <label>Extra Juz: </label>
-        <input type="checkbox" v-model="record.Revision.extraJuz" required  @input="setExtraJuz()"/>
+        <input type="checkbox" v-model="record.Revision.extraJuz" required  @input="setExtraJuz()"    v-bind:disabled="$store.state.login.role == 'student'"/>
       </div>
 
       <div v-if="record.Revision.extraJuz">
         <div>
           <label>Extra Juz 1: </label>
-          <input type="number" v-model="record.Revision.ajza[1].juz" required :min="1" :max="30" class="textbox" placeholder="2"/>
+          <input type="number" v-model="record.Revision.ajza[1].juz" required :min="1" :max="30" class="textbox" placeholder="2" readonly=true/>
         </div>
         
         <div>
           <label>Mistakes:</label>
-          <select v-model="record.Revision.ajza[1].mistakes">
+          <select v-model="record.Revision.ajza[1].mistakes" v-bind:disabled="$store.state.login.role == 'student'">
           <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
           </select>   
         </div>
 
         <div>
           <label>{{tracklabel}}:</label>
-          <select v-model="record.Revision.ajza[1].track">
+          <select v-model="record.Revision.ajza[1].track" v-bind:disabled="$store.state.login.role == 'student'">
             <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
           </select>
         </div>
 
         <div>
           <label>Extra Juz 2: </label>
-          <input type="number" v-model="record.Revision.ajza[2].juz" required :min="1" :max="30" class="textbox" placeholder="3"/>
+          <input type="number" v-model="record.Revision.ajza[2].juz" required :min="1" :max="30" class="textbox" placeholder="3" v-bind:readonly="$store.state.login.role == 'student'"/>
         </div>
         
         <div>
           <label>Mistakes:</label>
-          <select v-model="record.Revision.ajza[2].mistakes">
+          <select v-model="record.Revision.ajza[2].mistakes" v-bind:disabled="$store.state.login.role == 'student'">
           <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
           </select>   
         </div>
 
         <div>
           <label>{{tracklabel}}:</label>
-          <select v-model="record.Revision.ajza[2].track">
+          <select v-model="record.Revision.ajza[2].track" v-bind:disabled="$store.state.login.role == 'student'">
             <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
           </select>
         </div>
@@ -149,15 +149,15 @@
       <h4 class="mb-3">Homework</h4>
       <div>
         <label>New Lesson: </label>
-        <input type="string" v-model="record.Homework.newLesson" placeholder="# of Lines , Surah or Ayahs"/>
+        <input type="string" v-model="record.Homework.newLesson" placeholder="# of Lines , Surah or Ayahs" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <label>Attached Lesson:</label>
-      <select v-model="record.Homework.attachedLesson">
+      <select v-model="record.Homework.attachedLesson" v-bind:disabled="$store.state.login.role == 'student'">
           <option v-for="(portion,index) in Object.keys(lists.portions_attached)" :key="index" :value="portion">{{lists.portions_attached[portion]}}</option>
       </select>
       <div>
         <label>Revision:</label>
-        <input type="string" v-model="record.Homework.revision"  placeholder="Juz #, Extra Juz"/>
+        <input type="string" v-model="record.Homework.revision"  placeholder="Juz #, Extra Juz" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
       </div>
