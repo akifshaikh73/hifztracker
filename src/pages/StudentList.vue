@@ -16,6 +16,10 @@
       <th v-if="$store.state.login.role == 'admin'">
         Teacher ID
       </th>
+      <th v-if="$store.state.login.role == 'principal'">
+        Teacher
+      </th>
+
       <th colspan="2" v-if="$store.state.login.role == 'admin' ">Action</th>
     </tr>
     <tr v-for="s in students" :key="s.SK">
@@ -45,6 +49,12 @@
       </td>
       <td v-if="$store.state.login.role == 'admin'">
         <input type="text" v-model="s.LSK" />
+      </td>
+      <td v-if="$store.state.login.role == 'principal'">
+        {{s.teacher}}
+      </td>
+      <td v-if="$store.state.login.role == 'principal'">
+        {{s.program}}
       </td>
       <td v-if="$store.state.login.role == 'admin'">
         <button @click="assignTeacherToStudent(s.SK, s.LSK)">Assign</button>

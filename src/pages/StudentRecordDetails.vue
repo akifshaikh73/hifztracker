@@ -30,7 +30,7 @@
       <h4 class="mb-3">New Lesson</h4>
       <div>
         <label>Juz #: </label>
-        <input  v-model="record.NewLesson.juz" type="number" required :min="1" :max="30" v-bind:readonly="$store.state.login.role == 'student'"/>
+        <input  v-model="record.NewLesson.juz" type="number" required :min="1" :max="30" placeholder="3" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
         <label># of Lines :</label>
@@ -42,11 +42,11 @@
       </div>
       <div>
         <label>Surah (optional):</label>
-        <input type="string" v-model="record.NewLesson.surah" :min="1" :max="20" placeholder="Al-Imran" v-bind:readonly="$store.state.login.role == 'student'"/>
+        <input type="string" v-model="record.NewLesson.surah" placeholder="Ale-Imran" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
       <label>{{tracklabel}}:</label>
-      <select v-model="record.NewLesson.track" v-bind:disabled="$store.state.login.role == 'student'">
+      <select v-model="record.NewLesson.track" v-bind:disabled="$store.state.login.role == 'student'" ref="newLessonTrack" @input="handleNewLessonTrack()">
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
       </div>
@@ -63,11 +63,11 @@
 
       <div v-if="record.CurrentLesson.portion == 'other'">
         <label>Other:</label>
-        <input type="string" v-model="record.CurrentLesson.other" :min="1" :max="20" placeholder="Lines , Page # etc" v-bind:readonly="$store.state.login.role == 'student'"/>
+        <input type="string" v-model="record.CurrentLesson.other"  placeholder="Lines , Page # etc" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
 
       <label>{{tracklabel}}:</label>
-      <select v-model="record.CurrentLesson.track" v-bind:disabled="$store.state.login.role == 'student'">
+      <select v-model="record.CurrentLesson.track" v-bind:disabled="$store.state.login.role == 'student'" ref="attachedLessonTrack" @input="handleAttachedLessonTrack()"> 
         <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
       </select>
       <hr/>
@@ -77,7 +77,7 @@
 
       <div>
         <label>Juz: </label>
-        <input type="number" v-model="record.Revision.ajza[0].juz" required :min="1" :max="30" class="textbox" v-bind:readonly="$store.state.login.role == 'student'"/>
+        <input type="number" v-model="record.Revision.ajza[0].juz" required :min="1" :max="30" placeholder="5" class="textbox" v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
         <label>Portion:</label>
@@ -87,13 +87,13 @@
       </div>  
       <div>
         <label>Mistakes:</label>
-        <select v-model="record.Revision.ajza[0].mistakes" v-bind:disabled="$store.state.login.role == 'student'">
+        <select v-model="record.Revision.ajza[0].mistakes" v-bind:disabled="$store.state.login.role == 'student'" >
         <option v-for="(mistake,index) in Object.keys(lists.mistakes)" :key="index" :value="mistake">{{lists.mistakes[mistake]}}</option>
         </select>   
       </div>
       <div>
         <label>{{tracklabel}}:</label>
-        <select v-model="record.Revision.ajza[0].track" v-bind:disabled="$store.state.login.role == 'student'">
+        <select v-model="record.Revision.ajza[0].track" v-bind:disabled="$store.state.login.role == 'student'" ref="revisionTrack" @input="handleRevisionTrack('ej')">
           <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
         </select>
       </div>
@@ -105,8 +105,8 @@
 
       <div v-if="record.Revision.extraJuz">
         <div>
-          <label>Extra Juz 1: </label>
-          <input type="number" v-model="record.Revision.ajza[1].juz" required :min="1" :max="30" class="textbox" placeholder="2" readonly=true/>
+          <label>Extra Juz: </label>
+          <input type="number" v-model="record.Revision.ajza[1].juz" required :min="1" :max="30" class="textbox" placeholder="2" v-bind:readonly="$store.state.login.role == 'student'"/>
         </div>
         
         <div>
@@ -118,14 +118,14 @@
 
         <div>
           <label>{{tracklabel}}:</label>
-          <select v-model="record.Revision.ajza[1].track" v-bind:disabled="$store.state.login.role == 'student'">
+          <select v-model="record.Revision.ajza[1].track" v-bind:disabled="$store.state.login.role == 'student'"  ref="revisionTrack1" @input="handleRevisionTrack('ej1')">
             <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
           </select>
         </div>
 
         <div>
-          <label>Extra Juz 2: </label>
-          <input type="number" v-model="record.Revision.ajza[2].juz" required :min="1" :max="30" class="textbox" placeholder="3" v-bind:readonly="$store.state.login.role == 'student'"/>
+          <label>Extra Ajza : </label>
+          <input type="text" v-model="record.Revision.ajza[2].juz" required  class="textbox" placeholder="2,3-5" v-bind:readonly="$store.state.login.role == 'student'"/>
         </div>
         
         <div>
@@ -137,7 +137,7 @@
 
         <div>
           <label>{{tracklabel}}:</label>
-          <select v-model="record.Revision.ajza[2].track" v-bind:disabled="$store.state.login.role == 'student'">
+          <select v-model="record.Revision.ajza[2].track" v-bind:disabled="$store.state.login.role == 'student'" ref="revisionTrack2" @input="handleRevisionTrack('ej2')">
             <option v-for="(track,index) in Object.keys(lists.tracks)" :key="index" :value="track">{{lists.tracks[track]}}</option>
           </select>
         </div>
@@ -155,6 +155,12 @@
       <select v-model="record.Homework.attachedLesson" v-bind:disabled="$store.state.login.role == 'student'">
           <option v-for="(portion,index) in Object.keys(lists.portions_attached)" :key="index" :value="portion">{{lists.portions_attached[portion]}}</option>
       </select>
+
+      <div v-if="record.Homework.attachedLesson == 'other'">
+        <label>Other:</label>
+        <input type="string" v-model="record.Homework.other" placeholder="Lines , Page # etc" v-bind:readonly="$store.state.login.role == 'student'"/>
+      </div>
+
       <div>
         <label>Revision:</label>
         <input type="string" v-model="record.Homework.revision"  placeholder="Juz #, Extra Juz" v-bind:readonly="$store.state.login.role == 'student'"/>
@@ -194,6 +200,7 @@ export default {
         m_errors: [],
         lists : {
           mistakes : common.m_mistakes,
+          ntxTracks : ['N','T','X'],
           tracks : common.m_tracks,
           portions_attached : common.m_portions_attached,
           portions_revision : common.m_portions_revision,
@@ -272,11 +279,69 @@ export default {
 
     },
 
+    handleNewLessonTrack() {
+      var trackID  = this.$refs.newLessonTrack.options[this.$refs.newLessonTrack.selectedIndex].value ;
+      console.log(trackID);
+      if(this.lists.ntxTracks.indexOf(trackID) != -1) {
+        console.log(`Resetting`);
+        this.record.NewLesson.juz = null;
+        this.record.NewLesson.lines = null;
+        this.record.NewLesson.page = null;
+        this.record.NewLesson.surah = null;
+
+      }
+    },
+    handleAttachedLessonTrack() {
+      var trackID  = this.$refs.attachedLessonTrack.options[this.$refs.attachedLessonTrack.selectedIndex].value ;
+      console.log(trackID);
+      if(this.lists.ntxTracks.indexOf(trackID) != -1) {
+        console.log(`Resetting Attached`);
+        this.record.CurrentLesson.portion = null;
+      }
+    },
+
+    handleRevisionTrack(ej) {
+      var trackID  = null;
+      switch(ej) {
+        case 'ej':
+          trackID  = this.$refs.revisionTrack.options[this.$refs.revisionTrack.selectedIndex].value ;
+          break;
+        case 'ej1':
+          trackID  = this.$refs.revisionTrack1.options[this.$refs.revisionTrack1.selectedIndex].value ;
+          break;
+        case 'ej2':
+          trackID  = this.$refs.revisionTrack2.options[this.$refs.revisionTrack2.selectedIndex].value ;
+          break;
+      }
+      console.log(`handleRevisionTrack ${ej} ${trackID}`);
+      if(this.lists.ntxTracks.indexOf(trackID) != -1) {
+        console.log(`Resetting Revision`);
+        switch(ej) {
+          case 'ej':
+            this.record.Revision.ajza[0].juz = null;
+            this.record.Revision.ajza[0].portion = null;
+            this.record.Revision.ajza[0].mistakes = null;
+            break;
+          case 'ej1':
+            this.record.Revision.ajza[1].juz = null;
+            this.record.Revision.ajza[1].mistakes = null;
+            break;
+          case 'ej2':
+            this.record.Revision.ajza[2].juz = null;
+            this.record.Revision.ajza[2].mistakes = null;
+            break;
+        }
+      }
+    },
+
+
     markAbsent() {
       console.log(`Absent: ${this.record.absent}`);
-      //this.record.NewLesson = DefaultNewLesson();
-      //this.record.CurrentLesson = DefaultCurrentLesson();
-      //this.record.Revision = DefaultRevision();
+      // Reset all data
+      this.record.NewLesson = DefaultNewLesson();
+      this.record.CurrentLesson = DefaultCurrentLesson();
+      this.record.Revision = DefaultRevision();
+      this.record.Homework = DefaultHomework();
       this.record.NewLesson.track = 'X';
       this.record.CurrentLesson.track = 'X';
       this.record.Revision.ajza[0].track = 'X';
@@ -291,6 +356,9 @@ export default {
       this.m_errors = [];
       if(this.record.CurrentLesson.portion != 'other') {
         this.record.CurrentLesson.other = ''
+      }
+      if(this.record.Homework.attachedLesson != 'other') {
+        this.record.Homework.other = ''
       }
 
       if (this.record.NewLesson.juz > 30 || this.record.Revision.juz > 30) {

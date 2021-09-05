@@ -88,54 +88,48 @@ function getAPIBase() {
 
  function DefaultNewLesson() {
     return {
-      juz: 1,
-      lines: 1,
-      track : "P"
+      juz: null,
+      lines: null,
+      track : "N"
     };
   }
   
  function DefaultHomework() {
     return {
-      /*
-      juz: 1,
-      ayahs: "1-10",
-      track : "P"
-      */
+      newLesson: null,
+      attachedLession: null,
+      revision : null
     };
   }
   
   
  function DefaultCurrentLesson() {
     return {
-      portion: "current",
+      portion: null,
       other:"",
-      track: "P"
+      track: "N"
     };
   }
   
  function DefaultRevision() {
     return {
-      //portion: "full",
-      //juz: 1,
-      //mistakes: "0-1",
-      //track: "P",
       extraJuz : false,
       ajza: [
         {
-          juz:1,
-          portion: "full",
-          mistakes: "0-1",
-          track: "P",
+          juz:null,
+          portion: null,
+          mistakes: null,
+          track: "N",
         },
         {
-          juz:2,
-          mistakes: "0-1",
-          track: "P",
+          juz:null,
+          mistakes: null,
+          track: "N",
         },
         {
-          juz:3,
-          mistakes: "0-1",
-          track: "P",
+          juz:null,
+          mistakes: null,
+          track: "N",
         }
       ]
     };

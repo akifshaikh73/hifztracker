@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import App from './App'
 import Login from './pages/Login'
+import Help from './pages/Help'
 import SchoolList from './pages/SchoolList'
 import TeacherList from './pages/TeacherList'
 import StudentList from './pages/StudentList'
@@ -18,6 +19,15 @@ export default new Router(
         path: '/login/:role?/:id?/:password?',
         component: Login,
         name:'login'
+      },
+      {
+        path: '/help',
+        component: Help,
+        name: 'help'
+      },
+      {
+        path: '/assets',
+        name: 'assets'
       },
       {
         path: '/home',

@@ -76,6 +76,15 @@
     </div>
 <router-view></router-view>
   <div>
+    <!--router-link 
+            :to="{
+              name: 'help'
+            }"
+          >
+          Help
+    </router-link-->
+  </div>  
+  <div style="font-size:small">
     <a href="mailto:aws@uthmanacademy.org">Support</a> 
   </div>  
   
@@ -91,7 +100,7 @@ export default {
   name: "App",
   data() {
     return {
-      version : "1.1.0"
+      version : "1.5.0"
     };
   },
   mounted() {

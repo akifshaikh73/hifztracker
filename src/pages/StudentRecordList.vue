@@ -5,6 +5,9 @@
       <span>Show All Records: </span>
       <input type="checkbox" v-model="showAllRecords" required  @input="showRecords()"/>
     </div>
+     <div style="font-size:x-small">
+       Please note that not all data attributes are shown in this summarized report. To see details, please click the Date link
+     </div>
     <table class="table-bordered">
       <thead>
       <tr border="1">
