@@ -2,8 +2,9 @@
   <div id="app" class="container">
     <img alt="Vue logo" src="./assets/MU.png" />
     
-    <div>
-      <h5> Hifz Tracker  {{version}}</h5>
+    <div style="font-size:x-small">
+      <h5> Hifz Tracker </h5>
+      v{{version}}
     </div>
     <!--HelloWorld msg="Welcome to Your Vue.js App" /-->
 
@@ -75,19 +76,18 @@
       <a href="#" v-on:click="logOut">Logout</a>
     </div>
 <router-view></router-view>
-  <div>
-    <!--router-link 
+  <div style="font-size:small">
+    <router-link 
             :to="{
               name: 'help'
             }"
           >
           Help
-    </router-link-->
+    </router-link>
   </div>  
   <div style="font-size:small">
-    <a href="mailto:aws@uthmanacademy.org">Support</a> 
+    <a href="mailto:akif.shaikh@uthmanacademy.org">Support</a> 
   </div>  
-  
   </div>
 </template>
 
@@ -100,7 +100,7 @@ export default {
   name: "App",
   data() {
     return {
-      version : "1.5.0"
+      version : "1.5.1"
     };
   },
   mounted() {

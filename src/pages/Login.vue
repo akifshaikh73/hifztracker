@@ -21,7 +21,7 @@
       </tr>
     </table>
     <div>
-      <button @click.prevent="submitLogin">Submit</button>
+      <button @click.prevent="submitLogin">Login</button>
     </div>
     <div v-if="error" class="error">{{ errorMessage }}</div>
   </form>

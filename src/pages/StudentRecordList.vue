@@ -6,7 +6,7 @@
       <input type="checkbox" v-model="showAllRecords" required  @input="showRecords()"/>
     </div>
      <div style="font-size:x-small">
-       Please note that not all data attributes are shown in this summarized report. To see details, please click the Date link
+       Please note that not all data elements are shown in this summarized report. To see details, please click the Date link
      </div>
     <table class="table-bordered">
       <thead>
@@ -17,8 +17,7 @@
         <th colspan="5" style="text-align:center">Revision</th>
       </tr>
       <tr>
-        <th>Day</th>
-        <th width="250px">Date</th>
+        <th width="125px">Day-Date</th>
         <th>Juz</th>
         <th>Lines</th>
         <th>Track</th>
@@ -35,9 +34,6 @@
 
       <tr v-for="record in records" :key="record.SK">
         <td>
-            {{ m_days[new Date(record.SK).getDay()] }}
-        </td>  
-        <td>
           <router-link
             :to="{
                 name: 'record_detail',
@@ -47,7 +43,7 @@
               },
             }"
           >
-            {{ record.SK }}
+            {{ m_days[new Date(record.SK).getDay()] }}-{{new Date(record.SK).getMonth()+1}}/{{new Date(record.SK).getUTCDate()}}
           </router-link>
         </td>
         <td v-if="record.NewLesson.track == 'X'" colspan="3" class="absent">
@@ -97,13 +93,27 @@
     <div v-if="$store.state.login.role == 'teacher'">
       <button @click="newRecordDetail">Add Record</button>
     </div>
+  <div style="font-size:x-small;">
+    <table>
+    <tr style="font-weight: bold;"> Legend: </tr>
+    <tr>
+    </tr>    
+    <tbody>
+    <tr v-for="(track,index) in Object.keys(lists.tracks)" :key="index"> 
+      {{track}}-{{lists.tracks[track]}}
+      </tr>
+    </tbody>  
+    </table>
+  </div>  
+
   </div>
+
 </template>
 <script>
 /* eslint-disable vue/no-unused-components, no-unused-vars */
 
 import axios from "axios";
-import { DefaultCurrentLesson, DefaultRevision, portions } from "../tracker_common";
+import { DefaultCurrentLesson, DefaultRevision } from "../tracker_common";
 
 import common from "../tracker_common";
 
@@ -118,6 +128,8 @@ export default {
       lists: {
         portions_attached: common.m_portions_attached,
         portions_revision: common.m_portions_revision,
+        tracks : common.m_tracks
+
       },
     };
   },
