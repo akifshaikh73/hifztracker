@@ -19,6 +19,9 @@
       <th v-if="$store.state.login.role == 'principal'">
         Teacher
       </th>
+      <th v-if="$store.state.login.role == 'principal'">
+        Program
+      </th>
 
       <th colspan="2" v-if="$store.state.login.role == 'admin' ">Action</th>
     </tr>
@@ -120,7 +123,10 @@ export default {
           name: teachers[0].name,
           id:teachers[0].SK,
           program: teachers[0].program
-        });
+      });
+      console.log("Sorting")
+      this.students = this.students.sort((s1,s2)=> {if (s1.LSK > s2.LSK) return 1; else return -1} );
+
 
       this.newStudent = "";
     });
@@ -148,7 +154,7 @@ export default {
         // refresh the student list
         console.log("refresh the student list");
         var api_url = '';
-        if(this.$store.state.login.role == 'admin')
+        if(this.$store.state.login.role == 'principal' || this.$store.state.login.role == 'admin')
           api_url = `${common.getAPIBase()}school/${schoolkey}/students`;
         else  // Get students for a teacher
           api_url = `${common.getAPIBase()}school/${schoolkey}/teacher/${this.$store.state.teacher.id}/students`;
@@ -156,6 +162,7 @@ export default {
         axios.get(api_url).then((x) => {
           console.log(x);
           this.students = x.data.filter((student) => student.PK == "student::"+schoolkey);
+          this.students = this.students.sort((s1,s2)=> {if (s1.LSK > s2.LSK) return 1; else return -1} );
         });
         this.newStudent = "";
         this.id = "";

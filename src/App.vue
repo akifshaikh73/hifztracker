@@ -100,7 +100,7 @@ export default {
   name: "App",
   data() {
     return {
-      version : "1.5.1"
+      version : "1.5.2"
     };
   },
   mounted() {

@@ -11,7 +11,7 @@
     <table class="table-bordered">
       <thead>
       <tr border="1">
-        <th colspan="2" ></th>
+        <th colspan="1" ></th>
         <th colspan="3" style="text-align:center">New Lesson</th>
         <th colspan="2" style="text-align:center">Attached</th>
         <th colspan="5" style="text-align:center">Revision</th>
@@ -43,7 +43,7 @@
               },
             }"
           >
-            {{ m_days[new Date(record.SK).getDay()] }}-{{new Date(record.SK).getMonth()+1}}/{{new Date(record.SK).getUTCDate()}}
+            {{ m_days[new Date(record.SK).getDay()] }}-{{new Date(record.SK).getUTCMonth()+1}}/{{new Date(record.SK).getUTCDate()}}
           </router-link>
         </td>
         <td v-if="record.NewLesson.track == 'X'" colspan="3" class="absent">
