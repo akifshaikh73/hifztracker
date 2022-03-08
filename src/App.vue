@@ -1,9 +1,9 @@
 <template>
-  <div id="app" class="container">
+  <div id="app" class="container-fluid" style="display: inline-block">
     <img alt="Vue logo" src="./assets/MU.png" />
     
     <div style="font-size:x-small">
-      <h5> Hifz Tracker </h5>
+    <h1 id="title" class="animate__animated animate__fadeInUp animate__delay-1s">HIFZ TRACKER</h1>
       v{{version}}
     </div>
     <!--HelloWorld msg="Welcome to Your Vue.js App" /-->
@@ -86,7 +86,7 @@
     </router-link>
   </div>  
   <div style="font-size:small">
-    <a href="mailto:akif.shaikh@uthmanacademy.org">Support</a> 
+    <a href="mailto:akif.shaikh@uthmanacademy.org">Contact Us</a> 
   </div>  
   </div>
 </template>
@@ -100,7 +100,7 @@ export default {
   name: "App",
   data() {
     return {
-      version : "1.5.2"
+      version : "1.6.0"
     };
   },
   mounted() {
@@ -129,17 +129,16 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  table-layout: fixed;
+  background-color:rgb(207, 219, 226)
 }
-
-
-
 
 table {
   color: #333;
   font-family: Helvetica, Arial, sans-serif;
-  width: 640px;
   border-collapse: collapse;
   border-spacing: 1;
+  background-color:rgb(121, 161, 184)
 }
 /*
 td,

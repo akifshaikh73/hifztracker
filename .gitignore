@@ -21,3 +21,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+mockup/Report.html
+mockup/SDetail.html
+RP_IF.html
+bootstrap-*

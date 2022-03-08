@@ -83,6 +83,12 @@ export default {
       this.teacherID = "";
     });
   },
+    computed: {
+      id() {
+        return this.newStudent.replace(/ /g,'.').toLowerCase();
+      }
+    },
+  
   /*
     {
     "docType": "teacher",
@@ -93,6 +99,18 @@ export default {
   }
   */
   methods: {
+    guid(len) {
+        var buf = [],
+            chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+            charlen = chars.length,
+            length = len || 32;
+            
+        for (var i = 0; i < length; i++) {
+            buf[i] = chars.charAt(Math.floor(Math.random() * charlen));
+        }
+        
+        return buf.join('');
+    },
     refreshList(schoolkey) {
         this.error = '';
         const api_url = `${common.getAPIBase()}school/${schoolkey}/teachers`;

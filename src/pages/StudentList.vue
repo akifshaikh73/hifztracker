@@ -133,7 +133,7 @@ export default {
   },
   computed: {
     id() {
-      return this.newStudent.replace(' ','.').toLowerCase();
+      return this.newStudent.replace(/ /g,'.').toLowerCase();
     }
   },
   methods: {

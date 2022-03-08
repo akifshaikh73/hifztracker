@@ -8,13 +8,15 @@
      <div style="font-size:x-small">
        Please note that not all data elements are shown in this summarized report. To see details, please click the Date link
      </div>
-    <table class="table-bordered">
+    <table class="table-bordered table">
       <thead>
       <tr border="1">
         <th colspan="1" ></th>
         <th colspan="3" style="text-align:center">New Lesson</th>
         <th colspan="2" style="text-align:center">Attached</th>
-        <th colspan="5" style="text-align:center">Revision</th>
+        <th v-if="$store.state.login.role != 'student'" colspan="5" style="text-align:center">Revision</th>
+        <th v-if="$store.state.login.role == 'student'" colspan="4" style="text-align:center">Revision</th>
+        <th v-if="$store.state.login.role == 'student'" colspan="3" style="text-align:center">Homework</th>
       </tr>
       <tr>
         <th width="125px">Day-Date</th>
@@ -27,6 +29,9 @@
         <th width="120px">Portion</th>
         <th>Mistakes</th>
         <th>Track</th>
+        <th v-if="$store.state.login.role == 'student'">New</th>
+        <th v-if="$store.state.login.role == 'student'">Attached</th>
+        <th v-if="$store.state.login.role == 'student'">Revision</th>
         <th v-if="$store.state.login.role == 'teacher'">Action</th>
       </tr>
       </thead>
@@ -82,6 +87,15 @@
         </td>
         <td v-if="record.Revision.ajza[0].track != 'X'" :class="m_styles[record.Revision.ajza[0].track]">
           {{ record.Revision.ajza[0].track }}
+        </td>
+        <td v-if="$store.state.login.role == 'student'">
+          {{ record.Homework.newLesson }}
+        </td>
+        <td v-if="$store.state.login.role == 'student'">
+          {{ record.Homework.attachedLesson }}
+        </td>
+        <td v-if="$store.state.login.role == 'student'">
+          {{ record.Homework.revision }}
         </td>
 
         <td v-if="$store.state.login.role == 'teacher'">

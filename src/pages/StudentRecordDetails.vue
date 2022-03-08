@@ -12,11 +12,11 @@
     <form @submit.prevent="submitRecordDetail">
       <div>
         <label>Date: </label>
-        <input  type="text" v-model="record.SK" required v-bind:readonly="$store.state.login.role == 'student'"/>
+        <input  type="text" placeholder="YYYY-MM-DD" v-model="record.SK" required v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
       <div>
         <label>Comment: </label>
-        <textarea  v-model="record.comment" required v-bind:readonly="$store.state.login.role == 'student'"/>
+        <textarea style="width:300px" maxlength="500" placeholder="Comment" v-model="record.comment" required v-bind:readonly="$store.state.login.role == 'student'"/>
       </div>
 
       <div v-if="$store.state.login.role == 'teacher'">
